@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smile PriceTag Master - Retail Price Tag Generator (16 Tags A4 Sheet)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app" class="app-layout">
+
+    <!-- Top Application Bar -->
+    <header class="top-header no-print">
+      <div class="brand-section">
+        <div class="brand-logo" style="background:#ffffff;padding:2px 6px;border-radius:6px;display:flex;align-items:center;">
+          <img src="BIGSAVE.PNG" alt="BIG SAVE Smile" style="height:34px;object-fit:contain;display:block;">
+        </div>
+        <div>
+          <h1 class="brand-title">PriceTag Master <span class="badge-pro">PRO</span></h1>
+          <p class="brand-subtitle">Supermarket Shelf & Promotional Price Tag Generator</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Global Store Name -->
+        <div class="control-group">
+          <label for="globalStoreName">Store Name</label>
+          <input type="text" id="globalStoreName" value="SMILE" maxlength="15" title="Store branding shown on tags">
+        </div>
+
+        <!-- Currency -->
+        <div class="control-group">
+          <label for="globalCurrency">Currency</label>
+          <select id="globalCurrency">
+            <option value="₹" selected>₹ (INR)</option>
+            <option value="$">$ (USD)</option>
+            <option value="€">€ (EUR)</option>
+            <option value="£">£ (GBP)</option>
+            <option value="AED">AED</option>
+            <option value="SAR">SAR</option>
+            <option value="">None</option>
+          </select>
+        </div>
+
+        <!-- A4 Grid Preset (Crucial for user's request) -->
+        <div class="control-group highlight-group">
+          <label for="gridPreset">A4 Sheet Grid</label>
+          <select id="gridPreset">
+            <optgroup label="🌟 Landscape Sheets (Horizontal)">
+              <option value="landscape-4x3">🖼️ Landscape: 4 Cols × 3 Rows (12 Tags / A4 Sheet)</option>
+              <option value="landscape-4x4">🖼️ Landscape: 4 Cols × 4 Rows (16 Tags / A4 Sheet)</option>
+            </optgroup>
+            <optgroup label="📄 Portrait Sheets (Vertical)">
+              <option value="4x5" selected>4 Cols × 5 Rows (20 Tags / A4 Sheet)</option>
+              <option value="5x4">5 Cols × 4 Rows (20 Tags / A4 Sheet)</option>
+              <option value="4x4">4 Cols × 4 Rows (16 Tags / A4)</option>
+              <option value="4x3">4 Cols × 3 Rows (12 Tags / A4)</option>
+              <option value="3x4">3 Cols × 4 Rows (12 Tags / A4)</option>
+              <option value="3x3">3 Cols × 3 Rows (9 Tags / A4)</option>
+              <option value="2x4">2 Cols × 4 Rows (8 Tags / A4)</option>
+              <option value="2x2">2 Cols × 2 Rows (4 Large Tags)</option>
+              <option value="1x4">1 Col × 4 Rows (4 Wide Shelf Tags / A4)</option>
+              <option value="1x3">1 Col × 3 Rows (3 Large Banner Tags / A4)</option>
+              <option value="1x2">1 Col × 2 Rows (2 Giant Tags / A4)</option>
+              <option value="1x1">1 Col × 1 Row (1 Full Page Poster)</option>
+            </optgroup>
+            <option value="custom">Custom Grid...</option>
+          </select>
+        </div>
+
+        <!-- Font Size & Thickness Control -->
+        <div class="control-group">
+          <label for="globalFontScale">Font Boldness & Size</label>
+          <select id="globalFontScale">
+            <option value="135" selected>🔥 Extra Heavy Black (+35%)</option>
+            <option value="150">💥 Ultra Giant Black (+50%)</option>
+            <option value="120">Thick & Big (+20%)</option>
+            <option value="100">Standard (100%)</option>
+          </select>
+        </div>
+
+        <!-- Show / Hide MRP Badges Control -->
+        <div class="control-group highlight-group">
+          <label for="mrpBadgeToggle">MRP & Save Badges</label>
+          <select id="mrpBadgeToggle">
+            <option value="auto" selected>✨ Show When MRP Exists (MRP + Save Badge)</option>
+            <option value="hide">❌ Hide MRP (No Badges)</option>
+          </select>
+        </div>
+
+        <!-- Primary Action Buttons -->
+        <div class="header-actions">
+          <button id="btnPrint" class="btn btn-primary" title="Print all tags formatted for A4 portrait paper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+            <span>Print A4</span>
+          </button>
+          <button id="btnDownloadA4Sheet" class="btn btn-success" title="Download complete A4 sheet with all 16 tags to print together (downloads multiple sheets if more than 16 items)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/><path d="M12 13v6M9 16l3 3 3-3"/></svg>
+            <span id="btnDownloadA4Text">Download A4 Sheet</span>
+          </button>
+          <button id="btnDownloadPNG" class="btn btn-secondary" title="Download selected individual tag as PNG">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            <span>Tag PNG</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Operational Ribbon: Import, Images & Management -->
+    <section class="toolbar-ribbon no-print">
+      <div class="ribbon-group">
+        <span class="ribbon-label">Spreadsheet Import:</span>
+        <!-- File input for Excel / CSV -->
+        <label class="btn btn-tool" for="fileUploadInput" title="Upload Excel (.xlsx, .xls) or CSV file">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>
+          Upload Excel / CSV
+        </label>
+        <input type="file" id="fileUploadInput" accept=".xlsx,.xls,.csv,.tsv" style="display: none;">
+
+        <button id="btnGoogleSheets" class="btn btn-tool" title="Import from Google Sheets URL or copy-paste">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          Google Sheets / Paste
+        </button>
+      </div>
+
+      <div class="ribbon-separator"></div>
+
+      <div class="ribbon-group">
+        <span class="ribbon-label">Image Automation:</span>
+        <!-- Folder auto-detection button (WebKit directory support) -->
+        <label class="btn btn-tool btn-accent" for="folderUploadInput" title="Select a local folder containing fruit/grocery photos. Automatically matches files with product names!">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          📁 Auto-Detect Images from Folder
+        </label>
+        <input type="file" id="folderUploadInput" webkitdirectory directory multiple style="display: none;">
+
+        <button id="btnDriveImages" class="btn btn-tool" title="Auto-detect images from Google Drive folder and match with products">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
+          ☁️ Auto-Detect from Google Drive Folder
+        </button>
+      </div>
+
+      <div class="ribbon-separator"></div>
+
+      <div class="ribbon-group">
+        <span class="ribbon-label">Tags Management:</span>
+        <button id="btnAddTag" class="btn btn-tool" title="Add a new blank tag to the sheet">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          + Add Tag
+        </button>
+        <button id="btnClearAllMrp" class="btn btn-tool" title="Remove MRP and Smile Save badges from all tags">
+          🚫 Remove All MRP
+        </button>
+        <button id="btnResetSample" class="btn btn-tool btn-subtle" title="Reload sample 16 supermarket items">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
+          Reset to 16 Samples
+        </button>
+        <button id="btnClearAll" class="btn btn-tool btn-danger-ghost" title="Clear all current tags">
+          Clear All
+        </button>
+      </div>
+    </section>
+
+    <!-- Main View Navigation Tabs -->
+    <nav class="view-tabs no-print">
+      <button class="tab-btn active" data-tab="tab-sheet">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        A4 Portrait Sheet Preview (<span id="tagCountBadge">16</span> Tags)
+      </button>
+      <button class="tab-btn" data-tab="tab-editor">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Edit Uploaded Data (<span id="tableCountBadge">16</span> Items)
+      </button>
+      <button class="tab-btn" data-tab="tab-designer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        Tag Designer & Positioning Studio
+      </button>
+    </nav>
+
+    <!-- Notification / Status Banner -->
+    <div id="statusAlert" class="status-banner no-print" style="display: none;">
+      <span id="statusIcon">ℹ️</span>
+      <span id="statusMessage">Status message</span>
+      <button id="btnCloseStatus" class="btn-close-alert">&times;</button>
+    </div>
+
+    <!-- MAIN CONTENT VIEWS -->
+    <main class="main-content">
+
+      <!-- ==================== TAB 1: A4 PRINT SHEET PREVIEW ==================== -->
+      <section id="tab-sheet" class="tab-panel active">
+        <div class="sheet-viewport-controls no-print">
+          <div class="view-settings">
+            <span class="view-setting-item">
+              <label for="cutGuidesToggle">
+                <input type="checkbox" id="cutGuidesToggle" checked>
+                Show Dotted Cut Lines
+              </label>
+            </span>
+            <span class="view-setting-item">
+              <label for="zoomSlider">Preview Zoom: <span id="zoomVal">80%</span></label>
+              <input type="range" id="zoomSlider" min="20" max="120" value="80" step="5">
+            </span>
+            <span class="view-setting-item">
+              <button id="btnZoomFit" class="btn btn-sm">Fit to Window</button>
+            </span>
+            <span class="view-setting-item">
+              <button id="btnSheetDownloadA4PNG" class="btn btn-sm btn-success" title="Download complete A4 sheet with 16 tags to print together">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/><path d="M12 13v6M9 16l3 3 3-3"/></svg>
+                <span id="btnSheetDownloadA4Text">Download A4 Sheet (PNG)</span>
+              </button>
+            </span>
+            <span class="view-setting-item" id="sheetDownloadAllWrapper" style="display: none;">
+              <button id="btnSheetDownloadAllA4PNG" class="btn btn-sm btn-accent" title="Download all A4 sheets as 300 DPI PNG files">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                <span id="btnSheetDownloadAllText">Download All Sheets</span>
+              </button>
+            </span>
+            <span class="view-setting-item">
+              <button id="btnSheetDownloadPNG" class="btn btn-sm btn-tool" title="Download selected tag as PNG">
+                <span>Single Tag PNG</span>
+              </button>
+            </span>
+          </div>
+
+          <div class="sheet-page-info">
+            <span>Page <strong id="currentPageNum">1</strong> of <strong id="totalPagesNum">1</strong></span>
+            <span class="sheet-hint">💡 Tip: Click on any tag to quickly edit its text or replace its photo!</span>
+          </div>
+        </div>
+
+        <!-- A4 Printable Sheets Container -->
+        <div class="a4-stage" id="a4Stage">
+          <!-- Dynamic A4 Page(s) will be injected here -->
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: DATA TABLE / BATCH EDITOR ==================== -->
+      <section id="tab-editor" class="tab-panel">
+        <div class="table-editor-container">
+          <div class="editor-header-bar">
+            <div class="editor-title-box">
+              <h2>Spreadsheet Data Editor</h2>
+              <p>Make quick in-place edits to product names, prices, units, or swap images after uploading.</p>
+            </div>
+            <div class="editor-quick-actions">
+              <button id="btnQuickAddRow" class="btn btn-sm btn-primary">+ Add New Item</button>
+              <button id="btnExportCSV" class="btn btn-sm btn-secondary">Export to CSV</button>
+            </div>
+          </div>
+
+          <!-- Quick Filters & Search -->
+          <div class="editor-search-row">
+            <input type="text" id="tableSearchInput" placeholder="🔍 Search products by name..." class="search-input">
+            <div class="table-stats">
+              Showing <span id="visibleRowCount">16</span> items | Total Savings: <strong id="totalSavingsSum">₹0.00</strong>
+            </div>
+          </div>
+
+          <!-- Editable Data Table -->
+          <div class="table-scroll-wrapper">
+            <table class="data-table" id="productDataTable">
+              <thead>
+                <tr>
+                  <th width="40">#</th>
+                  <th width="70">Image</th>
+                  <th>Product / Offer Title</th>
+                  <th width="120">MRP (<span class="curr-symbol">₹</span>)</th>
+                  <th width="120">Offer Price (<span class="curr-symbol">₹</span>)</th>
+                  <th width="100">Unit</th>
+                  <th width="130">Save Badge (<span class="curr-symbol">₹</span>)</th>
+                  <th width="100">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: TAG DESIGNER & POSITIONING STUDIO ==================== -->
+      <section id="tab-designer" class="tab-panel">
+        <div class="designer-grid">
+          <!-- Left: Tag Settings Controls -->
+          <div class="designer-sidebar">
+            <div class="card">
+              <div class="card-header">
+                <h3>Selected Tag Inspector</h3>
+                <select id="designerTagSelector" class="form-select"></select>
+              </div>
+              <div class="card-body">
+                <div class="form-field">
+                  <label>Offer / Product Title</label>
+                  <input type="text" id="dtTitle" class="form-input" placeholder="e.g. OFFER LITCHI">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>MRP (Strike-thru)</label>
+                    <input type="number" id="dtMrp" class="form-input" step="0.5" min="0">
+                  </div>
+                  <div class="form-field">
+                    <label>Offer Price</label>
+                    <input type="number" id="dtOffer" class="form-input" step="0.5" min="0">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>Unit Suffix</label>
+                    <input type="text" id="dtUnit" class="form-input" placeholder="KG, PC, PKT">
+                  </div>
+                  <div class="form-field">
+                    <label>Calculated Savings</label>
+                    <input type="text" id="dtSavings" class="form-input readonly-input" readonly>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label>Store Name / Badge Brand</label>
+                  <input type="text" id="dtStoreName" class="form-input" placeholder="SMILE">
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Pan & Zoom Controls -->
+            <div class="card">
+              <div class="card-header">
+                <h3>Product Image & Positioning</h3>
+              </div>
+              <div class="card-body">
+                <div class="form-field">
+                  <label>Upload / Replace Tag Image</label>
+                  <input type="file" id="dtImageUpload" accept="image/*" class="form-input">
+                </div>
+
+                <div class="form-field">
+                  <label>Image Zoom: <span id="dtZoomVal">100%</span></label>
+                  <input type="range" id="dtZoomSlider" min="50" max="250" value="100" class="range-slider">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>Pan X: <span id="dtPanXVal">0px</span></label>
+                    <input type="range" id="dtPanXSlider" min="-150" max="150" value="0" class="range-slider">
+                  </div>
+                  <div class="form-field">
+                    <label>Pan Y: <span id="dtPanYVal">0px</span></label>
+                    <input type="range" id="dtPanYSlider" min="-150" max="150" value="0" class="range-slider">
+                  </div>
+                </div>
+
+                <button id="btnResetImagePos" class="btn btn-sm btn-secondary w-100">Reset Image Position</button>
+              </div>
+            </div>
+
+            <!-- Typography & Outline Settings -->
+            <div class="card">
+              <div class="card-header">
+                <h3>Typography & Visual Styles</h3>
+              </div>
+              <div class="card-body">
+                <div class="form-field">
+                  <label>Title Font Size: <span id="dtTitleSizeVal">100%</span></label>
+                  <input type="range" id="dtTitleSize" min="70" max="140" value="100" class="range-slider">
+                </div>
+                <div class="form-field">
+                  <label>Price Font Size: <span id="dtPriceSizeVal">100%</span></label>
+                  <input type="range" id="dtPriceSize" min="70" max="140" value="100" class="range-slider">
+                </div>
+                <div class="form-field">
+                  <label>Text White Outline Thickness: <span id="dtStrokeVal">3px</span></label>
+                  <input type="range" id="dtStrokeWidth" min="1" max="8" value="3" class="range-slider">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Live Canvas Studio -->
+          <div class="designer-preview-area">
+            <div class="preview-header">
+              <h3>High-Definition Live Tag Render (300 DPI Canvas)</h3>
+              <div class="preview-actions">
+                <button id="btnDownloadSinglePNG" class="btn btn-sm btn-primary">Download This Tag (PNG)</button>
+              </div>
+            </div>
+
+            <div class="studio-canvas-wrapper">
+              <div id="designerTagContainer" class="designer-tag-display">
+                <!-- Live Tag will render here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== MODAL: GOOGLE SHEETS / TEXT PASTE ==================== -->
+    <div id="modalGoogleSheets" class="modal-overlay" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Import Data from Google Sheets or Excel</h3>
+          <button class="modal-close" id="btnCloseGSheetModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-tab-headers">
+            <button class="modal-tab-btn active" data-modaltab="gs-link">🔗 Google Sheet URL</button>
+            <button class="modal-tab-btn" data-modaltab="gs-paste">📋 Quick Paste Table</button>
+          </div>
+
+          <!-- Option A: Google Sheet URL -->
+          <div id="gs-link" class="modal-tab-content active">
+            <p class="modal-instruct">Paste your Google Sheet share link. (Ensure "Anyone with the link can view" is enabled):</p>
+            <input type="text" id="gsheetUrlInput" class="form-input mb-3" placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit...">
+            <div class="example-box">
+              <strong>Tip:</strong> Columns should preferably be named: <code>Item Name</code>, <code>MRP</code>, <code>Offer Price</code>, <code>Unit</code>.
+            </div>
+            <button id="btnFetchGSheet" class="btn btn-primary mt-3">Import from Google Sheet</button>
+          </div>
+
+          <!-- Option B: Direct Copy-Paste -->
+          <div id="gs-paste" class="modal-tab-content">
+            <p class="modal-instruct">Copy rows and columns directly from Excel or Google Sheets (Ctrl+C) and paste here (Ctrl+V):</p>
+            <textarea id="gsheetPasteTextarea" rows="8" class="form-textarea" placeholder="Item Name	MRP	Offer Price	Unit
+OFFER LITCHI	309	149	KG
+ROYAL APPLE	240	169	KG
+..."></textarea>
+            <button id="btnApplyPaste" class="btn btn-primary mt-3">Apply Pasted Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: GOOGLE DRIVE FOLDER AUTO-DETECTION ==================== -->
+    <div id="modalDriveFolder" class="modal-overlay" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>☁️ Auto-Detect from Google Drive Folder</h3>
+          <button class="modal-close" id="btnCloseDriveModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-instruct">Paste your Google Drive folder link. Product photos will be scanned automatically and matched to your items by filename!</p>
+          
+          <div class="form-field mb-3">
+            <label for="driveFolderUrlInput">Google Drive Folder Link or Folder ID:</label>
+            <input type="text" id="driveFolderUrlInput" class="form-input" placeholder="https://drive.google.com/drive/folders/YOUR_FOLDER_ID...">
+          </div>
+
+          <div class="example-box mb-3">
+            <strong>Requirement:</strong> The folder must be shared as <code>Anyone with the link can view</code>:
+            <div style="margin-top: 5px; font-size: 11px; color: #cbd5e1; line-height: 1.4;">
+              In Google Drive &rarr; Right-click your product photos folder &rarr; Click <strong>Share</strong> &rarr; Set <em>General access</em> to <strong>Anyone with the link</strong>.
+            </div>
+          </div>
+
+          <details class="mb-3" style="font-size: 12px; color: #94a3b8;">
+            <summary style="font-weight: 600; color: #cbd5e1; cursor: pointer; padding: 4px 0;">⚙️ Optional: Google Drive API Key (for private/org folders)</summary>
+            <div class="form-field mt-2">
+              <label for="driveApiKeyInput">API Key (Optional)</label>
+              <input type="password" id="driveApiKeyInput" class="form-input" placeholder="AIzaSy...">
+            </div>
+          </details>
+
+          <div class="modal-actions mt-3">
+            <button id="btnScanDriveFolder" class="btn btn-primary w-100">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span id="btnScanDriveText">Scan & Auto-Detect Images</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: IMAGE FOLDER MATCH RESULTS ==================== -->
+    <div id="modalFolderMatch" class="modal-overlay" style="display: none;">
+      <div class="modal-card modal-large">
+        <div class="modal-header">
+          <h3>Folder Image Auto-Detection Results</h3>
+          <button class="modal-close" id="btnCloseFolderModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="folderMatchSummary" class="mb-3">Scanned folder...</p>
+          <div class="match-list-wrapper" id="folderMatchList">
+            <!-- Matches populated dynamically -->
+          </div>
+          <div class="modal-actions mt-3">
+            <button id="btnConfirmMatches" class="btn btn-primary">Apply Matched Images to Tags</button>
+            <button id="btnCancelMatches" class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: QUICK EDIT SINGLE TAG ==================== -->
+    <div id="modalQuickEdit" class="modal-overlay" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Quick Edit Tag #<span id="qeTagId">1</span></h3>
+          <button class="modal-close" id="btnCloseQuickEdit">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-field">
+            <label>Product / Offer Title</label>
+            <input type="text" id="qeTitle" class="form-input">
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>MRP</label>
+              <input type="number" id="qeMrp" class="form-input" step="0.5">
+            </div>
+            <div class="form-field">
+              <label>Offer Price</label>
+              <input type="number" id="qeOffer" class="form-input" step="0.5">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Unit (e.g. KG, PC)</label>
+              <input type="text" id="qeUnit" class="form-input">
+            </div>
+            <div class="form-field">
+              <label>Calculated Savings</label>
+              <input type="text" id="qeSavings" class="form-input readonly-input" readonly>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Change Product Image</label>
+            <input type="file" id="qeImageUpload" accept="image/*" class="form-input">
+          </div>
+          <div class="modal-actions mt-3">
+            <button id="btnDownloadQePNG" class="btn btn-success" title="Download this tag as high-resolution PNG">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              <span>Download PNG</span>
+            </button>
+            <button id="btnSaveQuickEdit" class="btn btn-primary">Save Changes</button>
+            <button id="btnOpenInDesigner" class="btn btn-secondary">Open Designer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
