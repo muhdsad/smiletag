@@ -50,7 +50,17 @@
         <div class="control-group highlight-group">
           <label for="gridPreset">A4 Sheet Grid</label>
           <select id="gridPreset">
-            <optgroup label="🌟 Landscape Sheets (Horizontal)">
+            <optgroup label="🌟 Landscape Posters (Detected Split Style)">
+              <option value="landscape-1x1">🖼️ Single Poster: 1 Item (1 Col × 1 Row / A4 Landscape)</option>
+              <option value="landscape-2x1">🖼️ 2 Item Poster: 2 Items (2 Cols × 1 Row / A4 Landscape)</option>
+              <option value="landscape-1x2">🖼️ 2 Item Poster: 2 Items (1 Col × 2 Rows / A4 Landscape)</option>
+              <option value="landscape-3x1">🖼️ 3 Item Poster: 3 Items (3 Cols × 1 Row / A4 Landscape)</option>
+              <option value="landscape-1x3">🖼️ 3 Item Poster: 3 Items (1 Col × 3 Rows / A4 Landscape)</option>
+              <option value="landscape-2x2">🖼️ 4 Item Poster: 4 Items (2 Cols × 2 Rows / A4 Landscape)</option>
+              <option value="landscape-3x2">🖼️ 6 Item Poster: 6 Items (3 Cols × 2 Rows / A4 Landscape)</option>
+              <option value="landscape-4x2">🖼️ 8 Item Poster: 8 Items (4 Cols × 2 Rows / A4 Landscape)</option>
+            </optgroup>
+            <optgroup label="🌟 Landscape Shelf Tags">
               <option value="landscape-4x3">🖼️ Landscape: 4 Cols × 3 Rows (12 Tags / A4 Sheet)</option>
               <option value="landscape-4x4">🖼️ Landscape: 4 Cols × 4 Rows (16 Tags / A4 Sheet)</option>
             </optgroup>
@@ -152,12 +162,15 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           + Add Tag
         </button>
-        <button id="btnClearAllMrp" class="btn btn-tool" title="Remove MRP and Smile Save badges from all tags">
+        <button id="btnClearAllMrp" class="btn btn-tool" title="Remove MRP and Save badges from all tags">
           🚫 Remove All MRP
+        </button>
+        <button id="btnLoadPosterSample" class="btn btn-tool btn-accent" title="Load the 4 Reference Rice Posters from the uploaded sample">
+          🖼️ Load 4 Poster Items
         </button>
         <button id="btnResetSample" class="btn btn-tool btn-subtle" title="Reload sample 16 supermarket items">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
-          Reset to 16 Samples
+          Reset to 20 Samples
         </button>
         <button id="btnClearAll" class="btn btn-tool btn-danger-ghost" title="Clear all current tags">
           Clear All

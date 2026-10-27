@@ -458,7 +458,48 @@ body {
   height: 210mm;
 }
 
-/* Landscape Grid Presets */
+/* Landscape Poster Grid Presets (1, 2, 3, 4, 6, 8 Items) */
+.a4-grid.grid-landscape-1x1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.a4-grid.grid-landscape-2x1 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+}
+
+.a4-grid.grid-landscape-1x2 {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.a4-grid.grid-landscape-3x1 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+}
+
+.a4-grid.grid-landscape-1x3 {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.a4-grid.grid-landscape-2x2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.a4-grid.grid-landscape-3x2 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.a4-grid.grid-landscape-4x2 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+/* Landscape Standard Shelf Tag Presets */
 .a4-grid.grid-landscape-4x3 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(3, minmax(0, 1fr));
@@ -644,9 +685,11 @@ body {
   justify-content: space-between;
   gap: 3px;
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
   margin-bottom: 2px;
+  overflow: hidden;
 }
 
 /* MRP Amount (No Badge: Clean plain text with strikethrough) */
@@ -654,15 +697,15 @@ body {
 .mrp-badge {
   background: rgba(255, 255, 255, 0.88);
   color: #000000;
-  padding: 1% 2.5%;
+  padding: 0.8% 2%;
   font-family: var(--font-tag-heading);
-  font-size: clamp(8px, 5.8cqi, 15px);
+  font-size: clamp(7.5px, 5.0cqi, 14px);
   font-weight: 900;
   line-height: 1.1;
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.1px;
   border-radius: 2px;
   box-shadow: none;
   flex-shrink: 0;
@@ -682,24 +725,28 @@ body {
   right: -2px;
   top: 50%;
   height: 2px;
-  background-color: #000000;
+  background-color: #d80000; /* Red strikethrough matching detected poster */
   transform: translateY(-50%);
 }
 
-/* Red Store Save Badge (Reference exact match: SMILE SAVE ₹...) */
+/* Red Store Save Badge (SAVE ₹...) */
 .save-badge {
   background-color: #d80000;
   color: #ffffff;
-  padding: 1.5% 4%;
+  padding: 1% 2.8%;
   font-family: var(--font-tag-heading);
-  font-size: clamp(8px, 5.8cqi, 15px);
+  font-size: clamp(7.5px, 5.0cqi, 14px);
   font-weight: 800;
   line-height: 1.1;
   display: flex;
   align-items: center;
   white-space: nowrap;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  border-radius: 2px;
+  max-width: 65%;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /* Offer / Product Title Text (Aligned CENTER over Product Image with Thin White Outline & 2-Line Auto-Shrink) */
@@ -805,6 +852,223 @@ body {
   margin-left: 3px;
   letter-spacing: -0.5px;
   white-space: nowrap;
+}
+
+/* =========================================================
+   A4 LANDSCAPE POSTER STYLE (Detected from Uploaded Poster)
+   Split Side-by-Side: Left Product Image (40%), Right Info (60%)
+   ========================================================= */
+.price-tag-card.poster-style {
+  display: flex !important;
+  flex-direction: row !important;
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+}
+
+/* Left Column: Product Photography */
+.price-tag-card.poster-style .poster-left-col {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4% 3% 4% 4%;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #ffffff;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.price-tag-card.poster-style .poster-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain !important;
+  display: block;
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+.price-tag-card.poster-style .poster-img-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 90%;
+  height: 90%;
+  border: 2px dashed #cbd5e1;
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: clamp(10px, 3.5cqi, 14px);
+  font-weight: 700;
+  background-color: #f8fafc;
+}
+
+/* Right Column: Store Logo, Badges, Title, Price */
+.price-tag-card.poster-style .poster-right-col {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 3% 4% 3% 2%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  min-width: 0;
+}
+
+/* Top Store Logo Row */
+.price-tag-card.poster-style .poster-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: 1.5%;
+}
+
+.price-tag-card.poster-style .poster-top-logo {
+  max-height: clamp(18px, 14cqb, 56px);
+  max-width: 68%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Badges Row: MRP & Save Badge */
+.price-tag-card.poster-style .poster-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5px, 1.8cqi, 12px);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin-bottom: 1.5%;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.price-tag-card.poster-style .poster-mrp-box {
+  color: #000000;
+  font-family: var(--font-tag-heading);
+  font-size: clamp(9px, min(4.0cqi, 7.5cqb), 21px);
+  font-weight: 900;
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  letter-spacing: 0.1px;
+  flex-shrink: 0;
+}
+
+.price-tag-card.poster-style .poster-mrp-val {
+  position: relative;
+  display: inline-block;
+  margin-left: 3px;
+}
+
+/* Red Strikethrough */
+.price-tag-card.poster-style .poster-mrp-val::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 50%;
+  height: clamp(2px, 0.5cqb, 3.5px);
+  background-color: #d80000;
+  transform: translateY(-50%);
+}
+
+.price-tag-card.poster-style .poster-save-badge {
+  background-color: #d80000;
+  color: #ffffff;
+  padding: 1% 2.8%;
+  font-family: var(--font-tag-heading);
+  font-size: clamp(9px, min(4.0cqi, 7.5cqb), 21px);
+  font-weight: 800;
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+  border-radius: 2px;
+  max-width: 65%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Product Title Row */
+.price-tag-card.poster-style .poster-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 1% 0;
+  box-sizing: border-box;
+}
+
+.price-tag-card.poster-style .poster-title-text {
+  font-family: var(--font-tag-heading);
+  font-weight: 900 !important;
+  font-stretch: condensed;
+  color: #000000 !important;
+  text-transform: uppercase;
+  line-height: 0.92 !important;
+  letter-spacing: -0.5px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
+  font-size: calc(clamp(12px, min(7.5cqi, 16cqb), 68px) * var(--font-title-mult, 1.2) * var(--title-shrink, 1));
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+/* Offer Price & Unit Row */
+.price-tag-card.poster-style .poster-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-shrink: 0;
+  padding-top: 1%;
+}
+
+.price-tag-card.poster-style .poster-price-text {
+  font-family: var(--font-tag-heading);
+  font-weight: 900 !important;
+  font-stretch: condensed;
+  color: #000000 !important;
+  line-height: 0.88;
+  letter-spacing: -0.6px;
+  text-align: center;
+  white-space: nowrap;
+  font-size: calc(clamp(18px, min(10.5cqi, 23cqb), 92px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1));
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+.price-tag-card.poster-style .poster-unit-text {
+  font-family: var(--font-tag-heading);
+  font-size: 0.72em;
+  font-weight: 900;
+  color: #000000 !important;
+  letter-spacing: 0;
+  margin-left: 2px;
 }
 
 /* =========================================================
@@ -1383,6 +1647,47 @@ body {
     max-height: 202mm !important;
   }
 
+  /* Landscape Poster Grid Presets (1, 2, 3, 4, 6, 8 Items) */
+  .a4-grid.grid-landscape-1x1 {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 1fr !important;
+  }
+
+  .a4-grid.grid-landscape-2x1 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: 1fr !important;
+  }
+
+  .a4-grid.grid-landscape-1x2 {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .a4-grid.grid-landscape-3x1 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-rows: 1fr !important;
+  }
+
+  .a4-grid.grid-landscape-1x3 {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .a4-grid.grid-landscape-2x2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .a4-grid.grid-landscape-3x2 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .a4-grid.grid-landscape-4x2 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+  }
+
   .a4-grid.grid-landscape-4x3 {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     grid-template-rows: repeat(3, minmax(0, 1fr)) !important;
@@ -1474,18 +1779,21 @@ body {
     background: transparent !important;
     color: #000000 !important;
     font-weight: 900 !important;
-    font-size: 8.5pt !important;
+    font-size: 7.8pt !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   .mrp-strike::after {
-    background-color: #000000 !important;
+    background-color: #d80000 !important;
   }
 
   .save-badge {
     background-color: #d80000 !important;
     color: #ffffff !important;
+    font-size: 7.5pt !important;
+    padding: 0.4mm 1.6mm !important;
+    border-radius: 0.5mm !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -1677,6 +1985,119 @@ body {
     font-size: 0.65em !important;
     margin-left: 2pt !important;
   }
+
+  /* Landscape Poster Print Engine */
+  .price-tag-card.poster-style {
+    display: flex !important;
+    flex-direction: row !important;
+    border: 2pt solid #000000 !important;
+    background-color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .price-tag-card.poster-style .poster-left-col {
+    width: 40% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 3mm !important;
+    box-sizing: border-box !important;
+  }
+
+  .price-tag-card.poster-style .poster-img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+
+  .price-tag-card.poster-style .poster-right-col {
+    width: 60% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 2.5mm 3.5mm 2.5mm 2mm !important;
+    box-sizing: border-box !important;
+  }
+
+  .price-tag-card.poster-style .poster-logo-row {
+    margin-bottom: 1.5mm !important;
+  }
+
+  .price-tag-card.poster-style .poster-badge-row {
+    margin-bottom: 1.5mm !important;
+    gap: 2mm !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .price-tag-card.poster-style .poster-mrp-box {
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .price-tag-card.poster-style .poster-save-badge {
+    background-color: #d80000 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    border-radius: 0.8mm !important;
+  }
+
+  .price-tag-card.poster-style .poster-title-text {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+    color: #000000 !important;
+  }
+
+  .price-tag-card.poster-style .poster-price-text {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+    color: #000000 !important;
+  }
+
+  /* 1 Item Single Poster Print Typography */
+  .grid-landscape-1x1 .poster-top-logo { max-height: 25mm !important; }
+  .grid-landscape-1x1 .poster-mrp-box, .grid-landscape-1x1 .poster-save-badge { font-size: 22pt !important; padding: 1.8mm 5mm !important; }
+  .grid-landscape-1x1 .poster-title-text { font-size: calc(64pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
+  .grid-landscape-1x1 .poster-price-text { font-size: calc(88pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
+
+  /* 2 Item Poster Print Typography */
+  .grid-landscape-2x1 .poster-top-logo, .grid-landscape-1x2 .poster-top-logo { max-height: 18mm !important; }
+  .grid-landscape-2x1 .poster-mrp-box, .grid-landscape-2x1 .poster-save-badge,
+  .grid-landscape-1x2 .poster-mrp-box, .grid-landscape-1x2 .poster-save-badge { font-size: 15pt !important; padding: 1.2mm 3.5mm !important; }
+  .grid-landscape-2x1 .poster-title-text, .grid-landscape-1x2 .poster-title-text { font-size: calc(44pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
+  .grid-landscape-2x1 .poster-price-text, .grid-landscape-1x2 .poster-price-text { font-size: calc(60pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
+
+  /* 3 Item Poster Print Typography */
+  .grid-landscape-3x1 .poster-top-logo, .grid-landscape-1x3 .poster-top-logo { max-height: 14mm !important; }
+  .grid-landscape-3x1 .poster-mrp-box, .grid-landscape-3x1 .poster-save-badge,
+  .grid-landscape-1x3 .poster-mrp-box, .grid-landscape-1x3 .poster-save-badge { font-size: 11.5pt !important; padding: 0.9mm 2.8mm !important; }
+  .grid-landscape-3x1 .poster-title-text, .grid-landscape-1x3 .poster-title-text { font-size: calc(32pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
+  .grid-landscape-3x1 .poster-price-text, .grid-landscape-1x3 .poster-price-text { font-size: calc(46pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
+
+  /* 4 Item Poster Print Typography (Exact Reference Match) */
+  .grid-landscape-2x2 .poster-top-logo { max-height: 12mm !important; }
+  .grid-landscape-2x2 .poster-mrp-box, .grid-landscape-2x2 .poster-save-badge { font-size: 10.5pt !important; padding: 0.8mm 2.4mm !important; }
+  .grid-landscape-2x2 .poster-title-text { font-size: calc(28pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
+  .grid-landscape-2x2 .poster-price-text { font-size: calc(40pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
+
+  /* 6 Item Poster Print Typography */
+  .grid-landscape-3x2 .poster-top-logo { max-height: 9.5mm !important; }
+  .grid-landscape-3x2 .poster-mrp-box, .grid-landscape-3x2 .poster-save-badge { font-size: 8.5pt !important; padding: 0.6mm 1.8mm !important; }
+  .grid-landscape-3x2 .poster-title-text { font-size: calc(21pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
+  .grid-landscape-3x2 .poster-price-text { font-size: calc(30pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
+
+  /* 8 Item Poster Print Typography */
+  .grid-landscape-4x2 .poster-top-logo { max-height: 8mm !important; }
+  .grid-landscape-4x2 .poster-mrp-box, .grid-landscape-4x2 .poster-save-badge { font-size: 7.5pt !important; padding: 0.5mm 1.4mm !important; }
+  .grid-landscape-4x2 .poster-title-text { font-size: calc(16.5pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
+  .grid-landscape-4x2 .poster-price-text { font-size: calc(24pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 }
 
 /* =========================================================

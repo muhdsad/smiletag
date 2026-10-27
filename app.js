@@ -40,6 +40,13 @@ const DEFAULT_SAMPLE_PRODUCTS = [
   { id: '20', title: 'GARLIC PREMIUM', mrp: 95.0, offerPrice: 65.0, unit: 'KG', storeName: 'SMILE', image: '', imageScale: 1.0, imageX: 0, imageY: 0 }
 ];
 
+const REFERENCE_POSTER_PRODUCTS = [
+  { id: 'ref-1', title: 'PAVIZHAM UNDAMATTA 10 KG', mrp: 707.0, offerPrice: 555.0, unit: '10 KG', storeName: 'SMILE', image: 'assets/sample_images/pavizham_undamatta_10kg.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'ref-2', title: 'PAVIZHAM UNDAMATTA 5 KG', mrp: 357.0, offerPrice: 280.0, unit: '5 KG', storeName: 'SMILE', image: 'assets/sample_images/pavizham_undamatta_5kg.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'ref-3', title: 'PAVIZHAM VADIMATTA 5 KG', mrp: 454.0, offerPrice: 435.0, unit: '5 KG', storeName: 'SMILE', image: 'assets/sample_images/pavizham_vadimatta_5kg.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'ref-4', title: 'ROSE BRAND GHEE RICE JEERAKASALA RICE', mrp: 1200.0, offerPrice: 979.0, unit: '5 KG', storeName: 'SMILE', image: 'assets/sample_images/rose_brand_biriyani_5kg.jpg', imageScale: 1.0, imageX: 0, imageY: 0 }
+];
+
 function colLetterToIndex(colStr) {
   let idx = 0;
   for (let i = 0; i < colStr.length; i++) {
@@ -105,6 +112,7 @@ class PriceTagApp {
     this.elBtnDriveImages = document.getElementById('btnDriveImages');
     this.elBtnAddTag = document.getElementById('btnAddTag');
     this.elBtnClearAllMrp = document.getElementById('btnClearAllMrp');
+    this.elBtnLoadPosterSample = document.getElementById('btnLoadPosterSample');
     this.elBtnResetSample = document.getElementById('btnResetSample');
     this.elBtnClearAll = document.getElementById('btnClearAll');
 
@@ -256,8 +264,8 @@ class PriceTagApp {
         this.renderTableRows();
         this.notify(
           this.settings.mrpBadgeMode === 'hide'
-            ? 'MRP and Smile Save badges are now HIDDEN on all tags.'
-            : 'MRP and Smile Save badges enabled (will only show for items with MRP).',
+            ? 'MRP and Save badges are now HIDDEN on all tags.'
+            : 'MRP and Save badges enabled (will only show for items with MRP).',
           'info'
         );
       });
@@ -343,7 +351,7 @@ class PriceTagApp {
     this.elBtnAddTag.addEventListener('click', () => this.addNewTag());
     if (this.elBtnClearAllMrp) {
       this.elBtnClearAllMrp.addEventListener('click', () => {
-        if (confirm('Remove MRP from all tags? Both Yellow MRP and Red Smile Save badges will disappear.')) {
+        if (confirm('Remove MRP from all tags? Both MRP and Red Save badges will disappear.')) {
           this.tags.forEach(t => { t.mrp = 0; });
           this.settings.mrpBadgeMode = 'hide';
           if (this.elMrpBadgeToggle) this.elMrpBadgeToggle.value = 'hide';
@@ -351,6 +359,18 @@ class PriceTagApp {
           this.render();
           this.notify('Removed MRP from all tags successfully!', 'success');
         }
+      });
+    }
+    if (this.elBtnLoadPosterSample) {
+      this.elBtnLoadPosterSample.addEventListener('click', () => {
+        this.tags = JSON.parse(JSON.stringify(REFERENCE_POSTER_PRODUCTS));
+        this.settings.grid = 'landscape-2x2';
+        this.settings.mrpBadgeMode = 'auto';
+        if (this.elGridPreset) this.elGridPreset.value = 'landscape-2x2';
+        if (this.elMrpBadgeToggle) this.elMrpBadgeToggle.value = 'auto';
+        this.saveToStorage();
+        this.render();
+        this.notify('Loaded 4 Reference Rice Posters in A4 Landscape (2x2 Grid)!', 'success');
       });
     }
     this.elBtnResetSample.addEventListener('click', () => this.loadSampleData(true));
@@ -572,6 +592,21 @@ class PriceTagApp {
 
   loadInitialData() {
     try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('sample') === 'posters' || urlParams.get('sample') === 'poster') {
+        this.tags = JSON.parse(JSON.stringify(REFERENCE_POSTER_PRODUCTS));
+        this.settings.grid = urlParams.get('grid') || 'landscape-2x2';
+        this.settings.mrpBadgeMode = 'auto';
+        this.saveToStorage();
+        this.syncSettingsUI();
+        this.render();
+        this.notify('Loaded 4 Reference Rice Posters in A4 Landscape!', 'success');
+        return;
+      }
+      if (urlParams.get('grid')) {
+        this.settings.grid = urlParams.get('grid');
+      }
+
       const saved = localStorage.getItem('smile_pricetags_data');
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -620,7 +655,14 @@ class PriceTagApp {
   syncSettingsUI() {
     this.elGlobalStoreName.value = this.settings.storeName || 'SMILE';
     this.elGlobalCurrency.value = this.settings.currency || '₹';
-    this.elGridPreset.value = this.settings.grid || '4x5';
+    let gridVal = this.settings.grid || 'landscape-2x2';
+    if (gridVal === '1x1') gridVal = 'landscape-1x1';
+    else if (gridVal === '1x2' || gridVal === '2x1') gridVal = 'landscape-2x1';
+    else if (gridVal === '1x3' || gridVal === '3x1') gridVal = 'landscape-3x1';
+    else if (gridVal === '2x2') gridVal = 'landscape-2x2';
+    else if (gridVal === '3x2') gridVal = 'landscape-3x2';
+    else if (gridVal === '2x4' || gridVal === '4x2') gridVal = 'landscape-4x2';
+    this.elGridPreset.value = gridVal;
     if (this.elGlobalFontScale) {
       this.elGlobalFontScale.value = this.settings.globalFontScale || 135;
     }
@@ -1453,25 +1495,75 @@ class PriceTagApp {
   }
 
   // =========================================================================
-  // TAB 1: A4 PORTRAIT SHEET RENDERING (16 TAGS, 3x4, etc.)
+  // TAB 1: A4 SHEET RENDERING (Landscape Posters & Portrait Tags)
   // =========================================================================
   getGridConfig() {
     switch (this.settings.grid) {
-      case 'landscape-4x3': return { cols: 4, rows: 3, perPage: 12, cssClass: 'grid-landscape-4x3', orientation: 'landscape' };
-      case 'landscape-4x4': return { cols: 4, rows: 4, perPage: 16, cssClass: 'grid-landscape-4x4', orientation: 'landscape' };
-      case '4x5': return { cols: 4, rows: 5, perPage: 20, cssClass: 'grid-4x5', orientation: 'portrait' };
-      case '5x4': return { cols: 5, rows: 4, perPage: 20, cssClass: 'grid-5x4', orientation: 'portrait' };
-      case '4x4': return { cols: 4, rows: 4, perPage: 16, cssClass: 'grid-4x4', orientation: 'portrait' };
-      case '4x3': return { cols: 4, rows: 3, perPage: 12, cssClass: 'grid-4x3', orientation: 'portrait' };
-      case '3x4': return { cols: 3, rows: 4, perPage: 12, cssClass: 'grid-3x4', orientation: 'portrait' };
-      case '3x3': return { cols: 3, rows: 3, perPage: 9, cssClass: 'grid-3x3', orientation: 'portrait' };
-      case '2x4': return { cols: 2, rows: 4, perPage: 8, cssClass: 'grid-2x4', orientation: 'portrait' };
-      case '2x2': return { cols: 2, rows: 2, perPage: 4, cssClass: 'grid-2x2', orientation: 'portrait' };
-      case '1x4': return { cols: 1, rows: 4, perPage: 4, cssClass: 'grid-1x4', orientation: 'portrait' };
-      case '1x3': return { cols: 1, rows: 3, perPage: 3, cssClass: 'grid-1x3', orientation: 'portrait' };
-      case '1x2': return { cols: 1, rows: 2, perPage: 2, cssClass: 'grid-1x2', orientation: 'portrait' };
-      case '1x1': return { cols: 1, rows: 1, perPage: 1, cssClass: 'grid-1x1', orientation: 'portrait' };
-      default: return { cols: 4, rows: 5, perPage: 20, cssClass: 'grid-4x5', orientation: 'portrait' };
+      // 🌟 Landscape Posters (Detected Side-by-Side Split Poster Style)
+      case 'landscape-1x1':
+      case '1x1':
+        return { cols: 1, rows: 1, perPage: 1, cssClass: 'grid-landscape-1x1', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-2x1':
+      case '2x1':
+        return { cols: 2, rows: 1, perPage: 2, cssClass: 'grid-landscape-2x1', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-1x2':
+      case '1x2':
+        return { cols: 1, rows: 2, perPage: 2, cssClass: 'grid-landscape-1x2', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-3x1':
+      case '3x1':
+        return { cols: 3, rows: 1, perPage: 3, cssClass: 'grid-landscape-3x1', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-1x3':
+      case '1x3':
+        return { cols: 1, rows: 3, perPage: 3, cssClass: 'grid-landscape-1x3', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-2x2':
+      case '2x2':
+        return { cols: 2, rows: 2, perPage: 4, cssClass: 'grid-landscape-2x2', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-3x2':
+      case '3x2':
+        return { cols: 3, rows: 2, perPage: 6, cssClass: 'grid-landscape-3x2', orientation: 'landscape', isPosterStyle: true };
+
+      case 'landscape-4x2':
+      case '4x2':
+      case '2x4':
+        return { cols: 4, rows: 2, perPage: 8, cssClass: 'grid-landscape-4x2', orientation: 'landscape', isPosterStyle: true };
+
+      // 🌟 Landscape Shelf Tags
+      case 'landscape-4x3':
+        return { cols: 4, rows: 3, perPage: 12, cssClass: 'grid-landscape-4x3', orientation: 'landscape', isPosterStyle: false };
+
+      case 'landscape-4x4':
+        return { cols: 4, rows: 4, perPage: 16, cssClass: 'grid-landscape-4x4', orientation: 'landscape', isPosterStyle: false };
+
+      // 📄 Portrait Sheets
+      case '4x5':
+        return { cols: 4, rows: 5, perPage: 20, cssClass: 'grid-4x5', orientation: 'portrait', isPosterStyle: false };
+
+      case '5x4':
+        return { cols: 5, rows: 4, perPage: 20, cssClass: 'grid-5x4', orientation: 'portrait', isPosterStyle: false };
+
+      case '4x4':
+        return { cols: 4, rows: 4, perPage: 16, cssClass: 'grid-4x4', orientation: 'portrait', isPosterStyle: false };
+
+      case '4x3':
+        return { cols: 4, rows: 3, perPage: 12, cssClass: 'grid-4x3', orientation: 'portrait', isPosterStyle: false };
+
+      case '3x4':
+        return { cols: 3, rows: 4, perPage: 12, cssClass: 'grid-3x4', orientation: 'portrait', isPosterStyle: false };
+
+      case '3x3':
+        return { cols: 3, rows: 3, perPage: 9, cssClass: 'grid-3x3', orientation: 'portrait', isPosterStyle: false };
+
+      case '1x4':
+        return { cols: 1, rows: 4, perPage: 4, cssClass: 'grid-1x4', orientation: 'portrait', isPosterStyle: false };
+
+      default:
+        return { cols: 2, rows: 2, perPage: 4, cssClass: 'grid-landscape-2x2', orientation: 'landscape', isPosterStyle: true };
     }
   }
 
@@ -1529,7 +1621,7 @@ class PriceTagApp {
 
       for (let i = startIndex; i < endIndex; i++) {
         const tag = this.tags[i];
-        const tagCard = this.createTagDOMElement(tag, i);
+        const tagCard = this.createTagDOMElement(tag, i, config.isPosterStyle);
         gridDiv.appendChild(tagCard);
       }
 
@@ -1537,9 +1629,9 @@ class PriceTagApp {
       if (currentTagsOnPage < perPage) {
         for (let emptyIdx = currentTagsOnPage; emptyIdx < perPage; emptyIdx++) {
           const emptyCard = document.createElement('div');
-          emptyCard.className = 'price-tag-card empty-slot';
+          emptyCard.className = `price-tag-card empty-slot ${config.isPosterStyle ? 'poster-style' : ''}`;
           emptyCard.innerHTML = `
-            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:11px;font-weight:600;border:1.5px dashed #cbd5e1;margin:4px;border-radius:4px;background:#f8fafc;">
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:12px;font-weight:600;border:1.5px dashed #cbd5e1;margin:4px;border-radius:4px;background:#f8fafc;width:100%;">
               + Empty Slot ${emptyIdx + 1}
             </div>`;
           gridDiv.appendChild(emptyCard);
@@ -1557,13 +1649,13 @@ class PriceTagApp {
   autoFitAllLongTitles(container = this.elA4Stage) {
     if (!container) return;
     requestAnimationFrame(() => {
-      const titles = container.querySelectorAll('.tag-title-text');
+      const titles = container.querySelectorAll('.tag-title-text, .poster-title-text');
       titles.forEach(titleEl => {
-        const row = titleEl.closest('.tag-title-row');
+        const row = titleEl.closest('.tag-title-row') || titleEl.closest('.poster-title-row');
         if (!row) return;
 
         let maxIterations = 8;
-        // If text exceeds row height (i.e. more than 2 lines or overflows row), shrink progressively
+        // If text exceeds row height (i.e. more than 2-3 lines or overflows row), shrink progressively
         while (maxIterations > 0 && (titleEl.scrollHeight > row.clientHeight + 1 || titleEl.offsetHeight > row.clientHeight + 1)) {
           const card = titleEl.closest('.price-tag-card');
           const currentShrink = parseFloat(titleEl.style.getPropertyValue('--title-shrink') || (card ? card.style.getPropertyValue('--title-shrink') : '1') || '1');
@@ -1577,7 +1669,7 @@ class PriceTagApp {
     });
   }
 
-  createTagDOMElement(tag, index) {
+  createTagDOMElement(tag, index, isPosterStyle = false) {
     const card = document.createElement('div');
     const badgeMode = this.settings.mrpBadgeMode || 'auto';
     const numMrp = Number(tag.mrp || 0);
@@ -1590,7 +1682,7 @@ class PriceTagApp {
     const unitText = tag.unit ? ` / ${tag.unit}` : '';
 
     const hasImage = Boolean(tag.image && tag.image.trim().length > 0);
-    card.className = `price-tag-card ${hasImage ? 'has-image' : 'no-image'} ${hasMrp ? 'has-badges' : 'no-badges'}`;
+    card.className = `price-tag-card ${isPosterStyle ? 'poster-style' : ''} ${hasImage ? 'has-image' : 'no-image'} ${hasMrp ? 'has-badges' : 'no-badges'}`;
     card.dataset.index = index;
 
     const imgScale = tag.imageScale || 1.0;
@@ -1602,7 +1694,7 @@ class PriceTagApp {
     const titleMult = ((tag.titleSize || 100) / 100) * globalBoost;
     const priceMult = ((tag.priceSize || 100) / 100) * globalBoost;
 
-    // Auto-shrink factor for longer titles to guarantee it fits into at most 2 lines without any part hidden
+    // Auto-shrink factor for longer titles to guarantee it fits into at most 2-3 lines without overflow
     const titleStr = (tag.title || 'SPECIAL OFFER').trim().toUpperCase();
     const words = titleStr.split(/\s+/).filter(w => w.length > 0);
     const longestWordLen = words.reduce((max, w) => Math.max(max, w.length), 0);
@@ -1612,28 +1704,28 @@ class PriceTagApp {
 
     // Granular progressive shrink factor
     if (len > 38) {
-      shrinkFactor = 0.42;
+      shrinkFactor = 0.44;
     } else if (len > 32) {
-      shrinkFactor = 0.48;
+      shrinkFactor = 0.50;
     } else if (len > 26) {
-      shrinkFactor = 0.55;
+      shrinkFactor = 0.58;
     } else if (len > 21) {
-      shrinkFactor = 0.63;
+      shrinkFactor = 0.66;
     } else if (len > 17) {
-      shrinkFactor = 0.72;
+      shrinkFactor = 0.75;
     } else if (len > 13) {
-      shrinkFactor = 0.82;
+      shrinkFactor = 0.84;
     } else if (len > 9) {
-      shrinkFactor = 0.92;
+      shrinkFactor = 0.94;
     }
 
     // Check longest single word so individual long words fit horizontally
     if (longestWordLen > 14) {
-      shrinkFactor = Math.min(shrinkFactor, 0.45);
+      shrinkFactor = Math.min(shrinkFactor, 0.48);
     } else if (longestWordLen > 11) {
-      shrinkFactor = Math.min(shrinkFactor, 0.58);
+      shrinkFactor = Math.min(shrinkFactor, 0.60);
     } else if (longestWordLen > 9) {
-      shrinkFactor = Math.min(shrinkFactor, 0.72);
+      shrinkFactor = Math.min(shrinkFactor, 0.74);
     }
 
     // For 20-tag grids (4x5 and 5x4) where tags are narrower on A4, give extra room
@@ -1647,13 +1739,13 @@ class PriceTagApp {
     const fullPriceStr = `${offerVal}${unitText}`;
     let priceShrink = 1.0;
     if (fullPriceStr.length >= 14) {
-      priceShrink = 0.68;
+      priceShrink = 0.70;
     } else if (fullPriceStr.length >= 12) {
-      priceShrink = 0.76;
+      priceShrink = 0.78;
     } else if (fullPriceStr.length >= 10) {
-      priceShrink = 0.85;
+      priceShrink = 0.86;
     } else if (fullPriceStr.length >= 8) {
-      priceShrink = 0.92;
+      priceShrink = 0.94;
     }
 
     card.style.setProperty('--font-title-mult', titleMult);
@@ -1661,49 +1753,107 @@ class PriceTagApp {
     card.style.setProperty('--title-shrink', shrinkFactor);
     card.style.setProperty('--price-shrink', priceShrink);
 
-    card.innerHTML = `
-      ${hasImage ? `
-      <div class="tag-bg-layer">
-        <img src="${tag.image}" 
-             class="tag-bg-img" 
-             style="transform: translate(${imgX}px, ${imgY}px) scale(${imgScale});" 
-             alt="${tag.title}">
-      </div>` : ''}
-
-      <div class="tag-content-layer ${hasMrp ? 'has-badges' : 'no-badges'}">
-        <!-- Store Brand Logo (Permanently on top of each price tag) -->
-        <div class="tag-logo-row">
-          <img src="BIGSAVE.PNG" class="tag-top-logo" alt="BIG SAVE Smile">
+    if (isPosterStyle) {
+      // Detected A4 Landscape Split Poster Style (Left 40% Image, Right 60% Info & Price)
+      card.innerHTML = `
+        <div class="poster-left-col">
+          ${hasImage ? `
+            <img src="${tag.image}" 
+                 class="poster-img" 
+                 style="transform: translate(${imgX}px, ${imgY}px) scale(${imgScale});" 
+                 alt="${tag.title}">
+          ` : `
+            <div class="poster-img-placeholder">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              <span>+ Product Photo</span>
+            </div>
+          `}
         </div>
 
-        <!-- Top Badges / MRP & Saving Row -->
-        ${hasMrp ? `
-        <div class="tag-badge-row">
-          <div class="mrp-text-nobadge">
-            <span>MRP </span>
-            <span class="mrp-strike">${mrpVal}</span>
+        <div class="poster-right-col">
+          <!-- Top Store Logo -->
+          <div class="poster-logo-row">
+            <img src="BIGSAVE.PNG" class="poster-top-logo" alt="BIG SAVE Smile">
           </div>
-          <div class="save-badge">
-            <span>${store} SAVE ${this.settings.currency}${savings}</span>
-          </div>
-        </div>
-        ` : ''}
 
-        <!-- Product Title (Thick Big Black Font) -->
-        <div class="tag-title-row">
-          <div class="tag-title-text">
-            ${tag.title || 'SPECIAL OFFER'}
+          <!-- Badges Row: MRP with Red Strike & Save Badge -->
+          ${hasMrp ? `
+          <div class="poster-badge-row">
+            <div class="poster-mrp-box">
+              <span class="poster-mrp-label">MRP </span>
+              <span class="poster-mrp-val mrp-strike">${mrpVal}</span>
+            </div>
+            <div class="save-badge poster-save-badge">
+              <span>SAVE ${this.settings.currency}${savings}</span>
+            </div>
           </div>
-        </div>
+          ` : ''}
 
-        <!-- Price & Unit (Thick Big Black Font) -->
-        <div class="tag-price-row">
-          <div class="tag-price-text">
-            ${offerVal}<span class="tag-unit-text">${unitText}</span>
+          <!-- Product Title (Heavy Condensed Black Sans-Serif, Centered) -->
+          <div class="poster-title-row">
+            <div class="poster-title-text tag-title-text">
+              ${tag.title || 'SPECIAL OFFER'}
+            </div>
+          </div>
+
+          <!-- Price & Unit (Massive Black Font, Centered) -->
+          <div class="poster-price-row">
+            <div class="poster-price-text">
+              ${offerVal}<span class="poster-unit-text">${unitText}</span>
+            </div>
           </div>
         </div>
-      </div>
-    `;
+      `;
+    } else {
+      // Standard Retail Shelf Tag
+      card.innerHTML = `
+        ${hasImage ? `
+        <div class="tag-bg-layer">
+          <img src="${tag.image}" 
+               class="tag-bg-img" 
+               style="transform: translate(${imgX}px, ${imgY}px) scale(${imgScale});" 
+               alt="${tag.title}">
+        </div>` : ''}
+
+        <div class="tag-content-layer ${hasMrp ? 'has-badges' : 'no-badges'}">
+          <!-- Store Brand Logo (Permanently on top of each price tag) -->
+          <div class="tag-logo-row">
+            <img src="BIGSAVE.PNG" class="tag-top-logo" alt="BIG SAVE Smile">
+          </div>
+
+          <!-- Top Badges / MRP & Saving Row -->
+          ${hasMrp ? `
+          <div class="tag-badge-row">
+            <div class="mrp-text-nobadge">
+              <span>MRP </span>
+              <span class="mrp-strike">${mrpVal}</span>
+            </div>
+            <div class="save-badge">
+              <span>SAVE ${this.settings.currency}${savings}</span>
+            </div>
+          </div>
+          ` : ''}
+
+          <!-- Product Title (Thick Big Black Font) -->
+          <div class="tag-title-row">
+            <div class="tag-title-text">
+              ${tag.title || 'SPECIAL OFFER'}
+            </div>
+          </div>
+
+          <!-- Price & Unit (Thick Big Black Font) -->
+          <div class="tag-price-row">
+            <div class="tag-price-text">
+              ${offerVal}<span class="tag-unit-text">${unitText}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
     card.addEventListener('click', () => {
       this.selectedTagIndex = index;
@@ -1796,7 +1946,7 @@ class PriceTagApp {
       const numOffer = Number(tag.offerPrice || 0);
       const hasMrp = (badgeMode !== 'hide') && numMrp > 0 && numMrp > numOffer;
       const savingsBadgeHtml = hasMrp
-        ? `<span class="table-savings-badge">${tag.storeName || 'SMILE'} SAVE ${this.settings.currency}${Math.max(0, numMrp - numOffer).toFixed(2)}</span>`
+        ? `<span class="table-savings-badge">SAVE ${this.settings.currency}${Math.max(0, numMrp - numOffer).toFixed(2)}</span>`
         : `<span class="table-savings-badge" style="opacity: 0.5; background: #e2e8f0; color: #475569;">No MRP (No Badge)</span>`;
 
       rows.push(`
@@ -1964,7 +2114,7 @@ class PriceTagApp {
     if (badge) {
       if (hasMrp) {
         const diff = Math.max(0, numMrp - numOffer).toFixed(2);
-        badge.textContent = `${tag.storeName || 'SMILE'} SAVE ${this.settings.currency}${diff}`;
+        badge.textContent = `SAVE ${this.settings.currency}${diff}`;
         badge.style.opacity = '1';
         badge.style.background = '';
         badge.style.color = '';
@@ -2081,7 +2231,8 @@ class PriceTagApp {
     }
 
     this.elDesignerTagContainer.innerHTML = '';
-    const tagElement = this.createTagDOMElement(tag, this.selectedTagIndex);
+    const config = this.getGridConfig();
+    const tagElement = this.createTagDOMElement(tag, this.selectedTagIndex, config.isPosterStyle);
     tagElement.style.width = '100%';
     tagElement.style.height = '100%';
     this.elDesignerTagContainer.appendChild(tagElement);
@@ -2091,7 +2242,7 @@ class PriceTagApp {
   // =========================================================================
   // HIGH-DPI CANVAS RENDERING & EXPORT ENGINE (A4 Sheets & Single Tags)
   // =========================================================================
-  async drawTagOnCanvas(ctx, tag, x, y, width, height, imgCache = null) {
+  async drawTagOnCanvas(ctx, tag, x, y, width, height, imgCache = null, isPoster = false) {
     if (!tag) {
       // Draw empty slot with dashed border
       ctx.save();
@@ -2109,7 +2260,210 @@ class PriceTagApp {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(x, y, width, height);
 
-    // 2. Product image background (negative z-index backdrop)
+    // 2. Outer black border
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = (width > 800) ? 6 : 3.5;
+    ctx.strokeRect(x + 1.5, y + 1.5, width - 3, height - 3);
+
+    const badgeMode = this.settings.mrpBadgeMode || 'auto';
+    const numMrp = Number(tag.mrp || 0);
+    const numOffer = Number(tag.offerPrice || 0);
+    const hasMrp = (badgeMode !== 'hide') && numMrp > 0 && numMrp > numOffer;
+    const mrpVal = hasMrp ? numMrp.toFixed(1) : '';
+    const savings = hasMrp ? Math.max(0, numMrp - numOffer).toFixed(2) : '0.00';
+    const store = tag.storeName || this.settings.storeName;
+    const globalBoost = (this.settings.globalFontScale || 135) / 100;
+    const offerVal = Number(tag.offerPrice || 0).toFixed(2);
+    const unitText = tag.unit ? ` / ${tag.unit}` : '';
+    const fullPriceStr = `${offerVal}${unitText}`;
+    const titleStr = (tag.title || 'SPECIAL OFFER').trim().toUpperCase();
+
+    if (isPoster) {
+      // =====================================================================
+      // DETECTED POSTER STYLE: Horizontal Split (Left 40% Image, Right 60% Info)
+      // =====================================================================
+      const leftW = Math.round(width * 0.40);
+      const rightX = x + leftW;
+      const rightW = width - leftW;
+      const centerX = rightX + Math.round(rightW / 2);
+
+      // 1. Left Product Image (Clean contain layout on white background)
+      if (tag.image) {
+        try {
+          const img = await this.loadImageAsync(tag.image, imgCache);
+          const padX = Math.round(leftW * 0.05);
+          const padY = Math.round(height * 0.05);
+          const availW = leftW - padX * 2;
+          const availH = height - padY * 2;
+          const naturalW = img.naturalWidth || img.width;
+          const naturalH = img.naturalHeight || img.height;
+          const aspect = naturalW / naturalH;
+
+          let drawW, drawH;
+          if (aspect > (availW / availH)) {
+            drawW = availW;
+            drawH = drawW / aspect;
+          } else {
+            drawH = availH;
+            drawW = drawH * aspect;
+          }
+
+          const scale = tag.imageScale || 1.0;
+          drawW *= scale;
+          drawH *= scale;
+          const panX = (tag.imageX || 0) * (leftW / 400);
+          const panY = (tag.imageY || 0) * (height / 300);
+
+          const drawX = x + padX + (availW - drawW) / 2 + panX;
+          const drawY = y + padY + (availH - drawH) / 2 + panY;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(x + 2, y + 2, leftW - 4, height - 4);
+          ctx.clip();
+          ctx.drawImage(img, drawX, drawY, drawW, drawH);
+          ctx.restore();
+        } catch (e) {
+          console.warn('Could not load tag image for poster canvas export:', e);
+        }
+      }
+
+      // 2. Right Section - Store Logo (BIGSAVE.PNG)
+      const logoY = y + Math.round(height * 0.04);
+      const logoMaxH = Math.round(height * 0.125);
+      try {
+        const logoImg = await this.loadImageAsync('BIGSAVE.PNG', imgCache);
+        const aspect = (logoImg.naturalWidth || logoImg.width) / (logoImg.naturalHeight || logoImg.height);
+        const logoH = logoMaxH;
+        const logoW = Math.min(Math.round(logoH * aspect), Math.round(rightW * 0.65));
+        const actualH = Math.round(logoW / aspect);
+        const logoX = centerX - Math.round(logoW / 2);
+        ctx.drawImage(logoImg, logoX, logoY, logoW, actualH);
+      } catch (e) {
+        console.warn('Could not draw store logo on poster canvas:', e);
+      }
+
+      // 3. Right Section - Badges Row (MRP & Save Badge)
+      if (hasMrp) {
+        const badgeY = y + Math.round(height * 0.19);
+        const badgeH = Math.round(height * 0.088);
+        const mrpFontSize = Math.round(badgeH * 0.58);
+        ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+
+        const mrpPrefix = "MRP ";
+        const mrpPrefixW = ctx.measureText(mrpPrefix).width;
+        const mrpNumW = ctx.measureText(mrpVal).width;
+        const mrpTotalW = mrpPrefixW + mrpNumW;
+
+        const saveText = `SAVE ${this.settings.currency}${savings}`;
+        const saveFontSize = Math.round(badgeH * 0.48);
+        ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        const saveTextW = ctx.measureText(saveText).width;
+        const saveBadgePad = Math.round(badgeH * 0.30);
+        const saveBadgeW = saveTextW + saveBadgePad * 2;
+
+        const badgeGap = Math.round(rightW * 0.025);
+        const totalBadgesW = mrpTotalW + badgeGap + saveBadgeW;
+        const startBadgeX = centerX - (totalBadgesW / 2);
+        const badgeCenterY = badgeY + badgeH / 2;
+
+        // Draw MRP Text
+        ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#000000';
+        ctx.fillText(mrpPrefix, startBadgeX, badgeCenterY);
+        ctx.fillText(mrpVal, startBadgeX + mrpPrefixW, badgeCenterY);
+
+        // Red horizontal strikethrough over mrpVal
+        ctx.strokeStyle = '#d80000';
+        ctx.lineWidth = Math.max(2.5, Math.round(badgeH * 0.09));
+        ctx.beginPath();
+        ctx.moveTo(startBadgeX + mrpPrefixW - 2, badgeCenterY);
+        ctx.lineTo(startBadgeX + mrpTotalW + 2, badgeCenterY);
+        ctx.stroke();
+
+        // Draw Save Badge (Solid Red Rectangle with White Text)
+        const saveBadgeX = startBadgeX + mrpTotalW + badgeGap;
+        ctx.fillStyle = '#d80000';
+        ctx.fillRect(saveBadgeX, badgeY, saveBadgeW, badgeH);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        ctx.fillText(saveText, saveBadgeX + saveBadgeW / 2, badgeCenterY);
+      }
+
+      // 4. Right Section - Product Title (Solid Black, Centered, No Stroke)
+      const words = titleStr.split(/\s+/).filter(w => w.length > 0);
+      let lines = [];
+      if (words.length <= 2) {
+        lines = words.length === 2 && titleStr.length > 12 ? [words[0], words[1]] : [titleStr];
+      } else if (words.length === 3) {
+        if (words[0].length >= 7 || words[1].length + words[2].length <= 14) {
+          lines = [words[0], `${words[1]} ${words[2]}`];
+        } else {
+          lines = [`${words[0]} ${words[1]}`, words[2]];
+        }
+      } else if (words.length >= 4) {
+        const mid = Math.ceil(words.length / 2);
+        lines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+      } else {
+        lines = [titleStr];
+      }
+
+      const maxTitleW = rightW - Math.round(rightW * 0.08);
+      const titleTopY = hasMrp ? y + Math.round(height * 0.32) : y + Math.round(height * 0.20);
+      const titleBottomY = y + Math.round(height * 0.74);
+      const titleAvailH = titleBottomY - titleTopY;
+      const titleCenterY = titleTopY + titleAvailH / 2;
+
+      let titleFontSize = Math.round(height * 0.125 * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15));
+      ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+
+      let maxLineW = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 0);
+      if (maxLineW > maxTitleW) {
+        titleFontSize = Math.max(12, Math.floor(titleFontSize * (maxTitleW / maxLineW)));
+        ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+      }
+      const totalTextH = lines.length * titleFontSize * 0.95;
+      if (totalTextH > titleAvailH) {
+        titleFontSize = Math.max(10, Math.floor(titleFontSize * (titleAvailH / totalTextH)));
+        ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+      }
+
+      const stepY = titleFontSize * 0.95;
+      const startY = titleCenterY - ((lines.length - 1) * stepY) / 2;
+      ctx.fillStyle = '#000000';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      lines.forEach((line, i) => {
+        ctx.fillText(line, centerX, startY + (i * stepY));
+      });
+
+      // 5. Right Section - Price & Unit (Solid Black, Centered, No Stroke)
+      const priceCenterY = y + Math.round(height * 0.86);
+      let priceFontSize = Math.round(height * 0.18 * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15));
+      ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+      let priceW = ctx.measureText(fullPriceStr).width;
+      const maxPriceW = rightW - Math.round(rightW * 0.06);
+      if (priceW > maxPriceW) {
+        priceFontSize = Math.max(16, Math.floor(priceFontSize * (maxPriceW / priceW)));
+        ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+      }
+      ctx.fillStyle = '#000000';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(fullPriceStr, centerX, priceCenterY);
+
+      ctx.restore();
+      return;
+    }
+
+    // =========================================================================
+    // STANDARD RETAIL SHELF TAG CANVAS RENDERING
+    // =========================================================================
+    // Product image background (negative z-index backdrop)
     if (tag.image) {
       try {
         const img = await this.loadImageAsync(tag.image, imgCache);
@@ -2135,22 +2489,7 @@ class PriceTagApp {
       }
     }
 
-    // 3. Outer black border
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = (width > 800) ? 6 : 3.5;
-    ctx.strokeRect(x + 1.5, y + 1.5, width - 3, height - 3);
-
-    // 4. Badges (Only rendered when MRP is enabled, present, and greater than offerPrice)
-    const badgeMode = this.settings.mrpBadgeMode || 'auto';
-    const numMrp = Number(tag.mrp || 0);
-    const numOffer = Number(tag.offerPrice || 0);
-    const hasMrp = (badgeMode !== 'hide') &&
-      numMrp > 0 &&
-      numMrp > numOffer;
-    const mrpVal = hasMrp ? numMrp.toFixed(1) : '';
-    const savings = hasMrp ? Math.max(0, numMrp - numOffer).toFixed(2) : '0.00';
-    const store = tag.storeName || this.settings.storeName;
-    // 4. Store Brand Logo (Permanently on top of each price tag)
+    // Store Brand Logo (Permanently on top of each price tag)
     const logoY = y + Math.round(height * 0.016);
     const logoMaxH = hasMrp ? Math.round(height * 0.11) : Math.round(height * 0.15);
     try {
@@ -2201,8 +2540,8 @@ class PriceTagApp {
       const mrpNumX = badgeX + 2 + mrpPrefixW;
       ctx.fillText(mrpVal, mrpNumX, mrpTextCenterY);
 
-      // Strike-through line on MRP amount
-      ctx.strokeStyle = '#000000';
+      // Strike-through line on MRP amount (Red strikethrough)
+      ctx.strokeStyle = '#d80000';
       ctx.lineWidth = Math.max(2, Math.round(badgeH * 0.09));
       ctx.beginPath();
       ctx.moveTo(mrpNumX - 2, mrpTextCenterY);
@@ -2210,7 +2549,7 @@ class PriceTagApp {
       ctx.stroke();
 
       // 2. Red SAVE Badge (Prominent colored badge)
-      const saveBadgeX = badgeX + mrpTotalW + Math.round(width * 0.03);
+      const saveBadgeX = badgeX + mrpTotalW + Math.round(width * 0.025);
       const saveBadgeW = (x + width - Math.round(width * 0.035)) - saveBadgeX;
 
       ctx.fillStyle = '#d80000';
@@ -2220,21 +2559,18 @@ class PriceTagApp {
       ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", sans-serif`;
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'center';
-      ctx.fillText(`${store} SAVE ${this.settings.currency}${savings}`, saveBadgeX + saveBadgeW / 2, mrpTextCenterY);
+      ctx.fillText(`SAVE ${this.settings.currency}${savings}`, saveBadgeX + saveBadgeW / 2, mrpTextCenterY);
     }
 
     // 5. Product Title (Consumes upper section with Thin White Outline)
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const globalBoost = (this.settings.globalFontScale || 135) / 100;
-    const titleStr = (tag.title || 'SPECIAL OFFER').trim().toUpperCase();
 
     const words = titleStr.split(/\s+/).filter(w => w.length > 0);
     let lines = [titleStr];
     let baseTitleRatio = (width > 800) ? 0.095 : 0.125;
 
     if (words.length > 1 && titleStr.length > 10) {
-      // Find the most balanced two-line split
       let bestSplitIdx = 1;
       let minDiff = Infinity;
       for (let i = 1; i < words.length; i++) {
@@ -2297,8 +2633,8 @@ class PriceTagApp {
       });
     }
 
-    // 6. Price & Unit (Massive Thick Black Font, Auto-fit into the Column Width and consuming lower section)
-    const maxPriceWidth = width - 20; // 10px margin on each side of column
+    // 6. Price & Unit (Massive Thick Black Font)
+    const maxPriceWidth = width - 20;
     const basePriceRatio = (width > 800) ? 0.15 : 0.195;
     const maxPriceByHeight = hasMrp ? Math.round(height * 0.26) : Math.round(height * 0.34);
     let priceFontSize = Math.min(
@@ -2308,11 +2644,6 @@ class PriceTagApp {
     ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", "Anton", sans-serif`;
     ctx.textBaseline = 'middle';
 
-    const offerVal = Number(tag.offerPrice || 0).toFixed(2);
-    const unitText = tag.unit ? ` / ${tag.unit}` : '';
-    const fullPriceStr = `${offerVal}${unitText}`;
-
-    // Measure exact rendered text width on canvas and auto-fit to column
     let measuredPriceWidth = ctx.measureText(fullPriceStr).width;
     if (measuredPriceWidth > maxPriceWidth) {
       priceFontSize = Math.max(18, Math.floor(priceFontSize * (maxPriceWidth / measuredPriceWidth)));
@@ -2339,6 +2670,7 @@ class PriceTagApp {
       } catch (_) {}
     }
 
+    const config = this.getGridConfig();
     const canvas = document.createElement('canvas');
     const width = 1120;
     const height = 786;
@@ -2347,7 +2679,7 @@ class PriceTagApp {
     const ctx = canvas.getContext('2d');
     const imgCache = new Map();
 
-    await this.drawTagOnCanvas(ctx, tag, 0, 0, width, height, imgCache);
+    await this.drawTagOnCanvas(ctx, tag, 0, 0, width, height, imgCache, config.isPosterStyle);
 
     const link = document.createElement('a');
     link.download = `${(tag.title || 'tag').toLowerCase().replace(/\s+/g, '_')}_pricetag.png`;
@@ -2409,7 +2741,7 @@ class PriceTagApp {
       const tagX = marginX + c * (tagW + gapX);
       const tagY = marginY + r * (tagH + gapY);
 
-      await this.drawTagOnCanvas(ctx, tag, tagX, tagY, tagW, tagH, imgCache);
+      await this.drawTagOnCanvas(ctx, tag, tagX, tagY, tagW, tagH, imgCache, config.isPosterStyle);
 
       // Cut guides if enabled
       if (this.settings.showCutGuides) {

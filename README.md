@@ -7,9 +7,16 @@ A dedicated, fast, and modern software built specifically for supermarkets and r
 ## 🌟 Key Features
 
 1. **A4 Sheet Printing (Portrait & Landscape Orientations)**:
-   - **🌟 Landscape Sheets (Horizontal)**:
-     - **4 Columns × 3 Rows = 12 Tags per A4 Landscape sheet** (spacious, high-impact tags).
-     - **4 Columns × 4 Rows = 16 Tags per A4 Landscape sheet** (standard horizontal retail tag format).
+   - **🌟 Landscape Promotional Posters (Split Layout: Product Image Left, Pricing Right)**:
+     - **Single Poster: 1 Item (1 Col × 1 Row)**: Full-page high-impact A4 Landscape showcase.
+     - **2 Item Poster: 2 Items (2 Cols × 1 Row or 1 Col × 2 Rows)**: Large split landscape posters.
+     - **3 Item Poster: 3 Items (3 Cols × 1 Row or 1 Col × 3 Rows)**: High-visibility 3-product banner posters.
+     - **4 Item Poster: 4 Items (2 Cols × 2 Rows)**: Standard retail 4-poster grid matching official Smile reference.
+     - **6 Item Poster: 6 Items (3 Cols × 2 Rows)**: 6-item landscape showcase.
+     - **8 Item Poster: 8 Items (4 Cols × 2 Rows)**: Compact 8-poster landscape grid.
+   - **🌟 Landscape Shelf Tags**:
+     - **4 Columns × 3 Rows = 12 Tags per A4 Landscape sheet**.
+     - **4 Columns × 4 Rows = 16 Tags per A4 Landscape sheet**.
    - **📄 Portrait Sheets (Vertical)**:
      - **4 Columns × 5 Rows = 20 Tags per A4 sheet** (standard supermarket format).
      - **4 Columns × 4 Rows = 16 Tags per A4 sheet**.
