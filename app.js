@@ -2356,11 +2356,10 @@ class PriceTagApp {
         const mrpTotalW = mrpPrefixW + mrpNumW;
 
         const saveText = `SAVE ${this.settings.currency}${savings}`;
-        const saveFontSize = Math.round(badgeH * 0.48);
+        const saveFontSize = Math.round(badgeH * 0.60);
         ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
         const saveTextW = ctx.measureText(saveText).width;
-        const saveBadgePad = Math.round(badgeH * 0.30);
-        const saveBadgeW = saveTextW + saveBadgePad * 2;
+        const saveBadgeW = saveTextW;
 
         const badgeGap = Math.round(rightW * 0.025);
         const totalBadgesW = mrpTotalW + badgeGap + saveBadgeW;
@@ -2383,15 +2382,29 @@ class PriceTagApp {
         ctx.lineTo(startBadgeX + mrpTotalW + 2, badgeCenterY);
         ctx.stroke();
 
-        // Draw Save Badge (Solid Red Rectangle with White Text)
+        // Draw Save Badge (No Fill, Red Font, Little larger, Double Underline)
         const saveBadgeX = startBadgeX + mrpTotalW + badgeGap;
         ctx.fillStyle = '#d80000';
-        ctx.fillRect(saveBadgeX, badgeY, saveBadgeW, badgeH);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
         ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-        ctx.fillText(saveText, saveBadgeX + saveBadgeW / 2, badgeCenterY);
+        ctx.fillText(saveText, saveBadgeX, badgeCenterY);
+
+        // Double Underline for Save Text
+        const lineThick = Math.max(2, Math.round(badgeH * 0.05));
+        const lineGap = Math.max(2, Math.round(badgeH * 0.04));
+        const underlineY1 = Math.round(badgeCenterY + saveFontSize * 0.52);
+        const underlineY2 = underlineY1 + lineThick + lineGap;
+        ctx.strokeStyle = '#d80000';
+        ctx.lineWidth = lineThick;
+        ctx.beginPath();
+        ctx.moveTo(saveBadgeX, underlineY1);
+        ctx.lineTo(saveBadgeX + saveTextW, underlineY1);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(saveBadgeX, underlineY2);
+        ctx.lineTo(saveBadgeX + saveTextW, underlineY2);
+        ctx.stroke();
       }
 
       // 4. Right Section - Product Title (Solid Black, Centered, No Stroke)
@@ -2548,18 +2561,33 @@ class PriceTagApp {
       ctx.lineTo(mrpNumX + mrpNumW + 2, mrpTextCenterY);
       ctx.stroke();
 
-      // 2. Red SAVE Badge (Prominent colored badge)
+      // 2. SAVE Badge (No Fill, Red Font, Double Underline)
       const saveBadgeX = badgeX + mrpTotalW + Math.round(width * 0.025);
-      const saveBadgeW = (x + width - Math.round(width * 0.035)) - saveBadgeX;
+      const saveText = `SAVE ${this.settings.currency}${savings}`;
+      const saveFontSize = Math.round(badgeH * 0.58);
+      ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", sans-serif`;
+      const saveTextW = ctx.measureText(saveText).width;
 
       ctx.fillStyle = '#d80000';
-      ctx.fillRect(saveBadgeX, badgeY, saveBadgeW, badgeH);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(saveText, saveBadgeX, mrpTextCenterY);
 
-      const saveFontSize = Math.round(badgeH * 0.48);
-      ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", sans-serif`;
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'center';
-      ctx.fillText(`SAVE ${this.settings.currency}${savings}`, saveBadgeX + saveBadgeW / 2, mrpTextCenterY);
+      // Double Underline for Save Text
+      const lineThick = Math.max(1.5, Math.round(badgeH * 0.05));
+      const lineGap = Math.max(1.5, Math.round(badgeH * 0.04));
+      const underlineY1 = Math.round(mrpTextCenterY + saveFontSize * 0.52);
+      const underlineY2 = underlineY1 + lineThick + lineGap;
+      ctx.strokeStyle = '#d80000';
+      ctx.lineWidth = lineThick;
+      ctx.beginPath();
+      ctx.moveTo(saveBadgeX, underlineY1);
+      ctx.lineTo(saveBadgeX + saveTextW, underlineY1);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(saveBadgeX, underlineY2);
+      ctx.lineTo(saveBadgeX + saveTextW, underlineY2);
+      ctx.stroke();
     }
 
     // 5. Product Title (Consumes upper section with Thin White Outline)

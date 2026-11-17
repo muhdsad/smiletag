@@ -729,24 +729,34 @@ body {
   transform: translateY(-50%);
 }
 
-/* Red Store Save Badge (SAVE ₹...) */
+/* Red Store Save Badge (SAVE ₹... - No fill, red font, double underline) */
 .save-badge {
-  background-color: #d80000;
-  color: #ffffff;
-  padding: 1% 2.8%;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #d80000 !important;
+  padding: 0 1px !important;
   font-family: var(--font-tag-heading);
-  font-size: clamp(7.5px, 5.0cqi, 14px);
-  font-weight: 800;
+  font-size: clamp(8.5px, 5.6cqi, 16px);
+  font-weight: 900;
   line-height: 1.1;
   display: flex;
   align-items: center;
   white-space: nowrap;
   letter-spacing: 0.2px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  border-radius: 2px;
+  box-shadow: none !important;
+  border-radius: 0 !important;
   max-width: 65%;
   flex-shrink: 0;
   box-sizing: border-box;
+  text-decoration: underline double #d80000;
+  text-decoration-color: #d80000;
+  text-decoration-thickness: max(1.5px, 0.08em);
+  text-underline-offset: max(2.5px, 0.16em);
+}
+
+.save-badge span {
+  color: inherit !important;
+  text-decoration: inherit !important;
 }
 
 /* Offer / Product Title Text (Aligned CENTER over Product Image with Thin White Outline & 2-Line Auto-Shrink) */
@@ -989,21 +999,32 @@ body {
 }
 
 .price-tag-card.poster-style .poster-save-badge {
-  background-color: #d80000;
-  color: #ffffff;
-  padding: 1% 2.8%;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #d80000 !important;
+  padding: 0 2px !important;
   font-family: var(--font-tag-heading);
-  font-size: clamp(9px, min(4.0cqi, 7.5cqb), 21px);
-  font-weight: 800;
+  font-size: clamp(11.5px, min(4.8cqi, 9.2cqb), 26px);
+  font-weight: 900;
   line-height: 1.1;
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
   letter-spacing: 0.2px;
-  border-radius: 2px;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   max-width: 65%;
   flex-shrink: 0;
   box-sizing: border-box;
+  text-decoration: underline double #d80000;
+  text-decoration-color: #d80000;
+  text-decoration-thickness: max(1.5px, 0.08em);
+  text-underline-offset: max(3px, 0.16em);
+}
+
+.price-tag-card.poster-style .poster-save-badge span {
+  color: inherit !important;
+  text-decoration: inherit !important;
 }
 
 /* Product Title Row */
@@ -1789,13 +1810,24 @@ body {
   }
 
   .save-badge {
-    background-color: #d80000 !important;
-    color: #ffffff !important;
-    font-size: 7.5pt !important;
-    padding: 0.4mm 1.6mm !important;
-    border-radius: 0.5mm !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #d80000 !important;
+    font-size: 8.5pt !important;
+    padding: 0 0.8mm !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    text-decoration: underline double !important;
+    text-decoration-color: #d80000 !important;
+    text-underline-offset: 0.16em !important;
+    text-decoration-thickness: 0.08em !important;
+  }
+
+  .save-badge span {
+    color: inherit !important;
+    text-decoration: inherit !important;
   }
 
   .tag-bg-layer {
@@ -2042,11 +2074,23 @@ body {
   }
 
   .price-tag-card.poster-style .poster-save-badge {
-    background-color: #d80000 !important;
-    color: #ffffff !important;
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #d80000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    border-radius: 0.8mm !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 1mm !important;
+    text-decoration: underline double !important;
+    text-decoration-color: #d80000 !important;
+    text-underline-offset: 0.16em !important;
+    text-decoration-thickness: 0.08em !important;
+  }
+
+  .price-tag-card.poster-style .poster-save-badge span {
+    color: inherit !important;
+    text-decoration: inherit !important;
   }
 
   .price-tag-card.poster-style .poster-title-text {
@@ -2063,39 +2107,47 @@ body {
 
   /* 1 Item Single Poster Print Typography */
   .grid-landscape-1x1 .poster-top-logo { max-height: 25mm !important; }
-  .grid-landscape-1x1 .poster-mrp-box, .grid-landscape-1x1 .poster-save-badge { font-size: 22pt !important; padding: 1.8mm 5mm !important; }
+  .grid-landscape-1x1 .poster-mrp-box { font-size: 22pt !important; padding: 1.8mm 5mm !important; }
+  .grid-landscape-1x1 .poster-save-badge { font-size: 26pt !important; padding: 0 1.5mm !important; }
   .grid-landscape-1x1 .poster-title-text { font-size: calc(64pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
   .grid-landscape-1x1 .poster-price-text { font-size: calc(88pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 
   /* 2 Item Poster Print Typography */
   .grid-landscape-2x1 .poster-top-logo, .grid-landscape-1x2 .poster-top-logo { max-height: 18mm !important; }
-  .grid-landscape-2x1 .poster-mrp-box, .grid-landscape-2x1 .poster-save-badge,
-  .grid-landscape-1x2 .poster-mrp-box, .grid-landscape-1x2 .poster-save-badge { font-size: 15pt !important; padding: 1.2mm 3.5mm !important; }
+  .grid-landscape-2x1 .poster-mrp-box,
+  .grid-landscape-1x2 .poster-mrp-box { font-size: 15pt !important; padding: 1.2mm 3.5mm !important; }
+  .grid-landscape-2x1 .poster-save-badge,
+  .grid-landscape-1x2 .poster-save-badge { font-size: 18pt !important; padding: 0 1mm !important; }
   .grid-landscape-2x1 .poster-title-text, .grid-landscape-1x2 .poster-title-text { font-size: calc(44pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
   .grid-landscape-2x1 .poster-price-text, .grid-landscape-1x2 .poster-price-text { font-size: calc(60pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 
   /* 3 Item Poster Print Typography */
   .grid-landscape-3x1 .poster-top-logo, .grid-landscape-1x3 .poster-top-logo { max-height: 14mm !important; }
-  .grid-landscape-3x1 .poster-mrp-box, .grid-landscape-3x1 .poster-save-badge,
-  .grid-landscape-1x3 .poster-mrp-box, .grid-landscape-1x3 .poster-save-badge { font-size: 11.5pt !important; padding: 0.9mm 2.8mm !important; }
+  .grid-landscape-3x1 .poster-mrp-box,
+  .grid-landscape-1x3 .poster-mrp-box { font-size: 11.5pt !important; padding: 0.9mm 2.8mm !important; }
+  .grid-landscape-3x1 .poster-save-badge,
+  .grid-landscape-1x3 .poster-save-badge { font-size: 14pt !important; padding: 0 0.8mm !important; }
   .grid-landscape-3x1 .poster-title-text, .grid-landscape-1x3 .poster-title-text { font-size: calc(32pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
   .grid-landscape-3x1 .poster-price-text, .grid-landscape-1x3 .poster-price-text { font-size: calc(46pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 
   /* 4 Item Poster Print Typography (Exact Reference Match) */
   .grid-landscape-2x2 .poster-top-logo { max-height: 12mm !important; }
-  .grid-landscape-2x2 .poster-mrp-box, .grid-landscape-2x2 .poster-save-badge { font-size: 10.5pt !important; padding: 0.8mm 2.4mm !important; }
+  .grid-landscape-2x2 .poster-mrp-box { font-size: 10.5pt !important; padding: 0.8mm 2.4mm !important; }
+  .grid-landscape-2x2 .poster-save-badge { font-size: 13pt !important; padding: 0 0.8mm !important; }
   .grid-landscape-2x2 .poster-title-text { font-size: calc(28pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
   .grid-landscape-2x2 .poster-price-text { font-size: calc(40pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 
   /* 6 Item Poster Print Typography */
   .grid-landscape-3x2 .poster-top-logo { max-height: 9.5mm !important; }
-  .grid-landscape-3x2 .poster-mrp-box, .grid-landscape-3x2 .poster-save-badge { font-size: 8.5pt !important; padding: 0.6mm 1.8mm !important; }
+  .grid-landscape-3x2 .poster-mrp-box { font-size: 8.5pt !important; padding: 0.6mm 1.8mm !important; }
+  .grid-landscape-3x2 .poster-save-badge { font-size: 10.5pt !important; padding: 0 0.6mm !important; }
   .grid-landscape-3x2 .poster-title-text { font-size: calc(21pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
   .grid-landscape-3x2 .poster-price-text { font-size: calc(30pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 
   /* 8 Item Poster Print Typography */
   .grid-landscape-4x2 .poster-top-logo { max-height: 8mm !important; }
-  .grid-landscape-4x2 .poster-mrp-box, .grid-landscape-4x2 .poster-save-badge { font-size: 7.5pt !important; padding: 0.5mm 1.4mm !important; }
+  .grid-landscape-4x2 .poster-mrp-box { font-size: 7.5pt !important; padding: 0.5mm 1.4mm !important; }
+  .grid-landscape-4x2 .poster-save-badge { font-size: 9.5pt !important; padding: 0 0.5mm !important; }
   .grid-landscape-4x2 .poster-title-text { font-size: calc(16.5pt * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important; }
   .grid-landscape-4x2 .poster-price-text { font-size: calc(24pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important; }
 }
