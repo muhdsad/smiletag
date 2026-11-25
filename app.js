@@ -47,6 +47,21 @@ const REFERENCE_POSTER_PRODUCTS = [
   { id: 'ref-4', title: 'ROSE BRAND GHEE RICE JEERAKASALA RICE', mrp: 1200.0, offerPrice: 979.0, unit: '5 KG', storeName: 'SMILE', image: 'assets/sample_images/rose_brand_biriyani_5kg.jpg', imageScale: 1.0, imageX: 0, imageY: 0 }
 ];
 
+const UPLOADED_REFERENCE_PRODUCTS = [
+  { id: 'up-1', title: 'AASHIRVAD COW GHEE 500 ML', mrp: 525.01, offerPrice: 389.00, unit: '500ML', storeName: 'SMILE', image: 'assets/uploaded_samples/item_1.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-2', title: 'AJMI PUTTU PODI 5KG', mrp: 447.00, offerPrice: 400.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_2.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-3', title: 'AL RADIH SYRUP NANNARI 700ML', mrp: 100.00, offerPrice: 100.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_3.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-4', title: 'ALPS ROSEMARY WATER 100ML', mrp: 230.00, offerPrice: 230.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_4.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-5', title: 'AMARAVADHI VELLA KURUVA RICE KG', mrp: 55.00, offerPrice: 55.00, unit: 'KGS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_5.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-6', title: 'AMIS PATHIRI PODI 5 KG', mrp: 400.00, offerPrice: 319.00, unit: 'AMIS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_6.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-7', title: 'AMRUTHAM GHEE 500 ML', mrp: 480.00, offerPrice: 400.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_7.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-8', title: 'AMUL CHOCOMINIS 250GM', mrp: 130.00, offerPrice: 120.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_8.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-9', title: 'AMUL IC VANILA 2LTR', mrp: 199.00, offerPrice: 199.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_9.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-10', title: 'AMULYA DAIRY WHITENER 500GM', mrp: 255.00, offerPrice: 255.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_10.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-11', title: 'ANAR', mrp: 170.00, offerPrice: 170.00, unit: '1 KG', storeName: 'SMILE', image: 'assets/uploaded_samples/item_11.jpg', imageScale: 1.0, imageX: 0, imageY: 0 },
+  { id: 'up-12', title: 'ANJARAKKANDY GHEE 500G', mrp: 390.00, offerPrice: 349.00, unit: 'NOS', storeName: 'SMILE', image: 'assets/uploaded_samples/item_12.jpg', imageScale: 1.0, imageX: 0, imageY: 0 }
+];
+
 function colLetterToIndex(colStr) {
   let idx = 0;
   for (let i = 0; i < colStr.length; i++) {
@@ -73,7 +88,8 @@ class PriceTagApp {
       globalTitleSize: 100,
       globalPriceSize: 100,
       globalStrokeWidth: 3,
-      mrpBadgeMode: 'auto'
+      mrpBadgeMode: 'auto',
+      imageDisplay: 'show'
     };
     this.selectedTagIndex = 0;
     this.pendingFolderMatches = [];
@@ -94,6 +110,7 @@ class PriceTagApp {
     this.elGridPreset = document.getElementById('gridPreset');
     this.elGlobalFontScale = document.getElementById('globalFontScale');
     this.elMrpBadgeToggle = document.getElementById('mrpBadgeToggle');
+    this.elImageDisplayToggle = document.getElementById('imageDisplayToggle');
     this.elBtnPrint = document.getElementById('btnPrint');
     this.elBtnDownloadA4Sheet = document.getElementById('btnDownloadA4Sheet');
     this.elBtnDownloadA4Text = document.getElementById('btnDownloadA4Text');
@@ -112,6 +129,8 @@ class PriceTagApp {
     this.elBtnDriveImages = document.getElementById('btnDriveImages');
     this.elBtnAddTag = document.getElementById('btnAddTag');
     this.elBtnClearAllMrp = document.getElementById('btnClearAllMrp');
+    this.elBtnClearAllImages = document.getElementById('btnClearAllImages');
+    this.elBtnLoadUploadedSample = document.getElementById('btnLoadUploadedSample');
     this.elBtnLoadPosterSample = document.getElementById('btnLoadPosterSample');
     this.elBtnResetSample = document.getElementById('btnResetSample');
     this.elBtnClearAll = document.getElementById('btnClearAll');
@@ -154,6 +173,7 @@ class PriceTagApp {
     this.elDtPanYSlider = document.getElementById('dtPanYSlider');
     this.elDtPanYVal = document.getElementById('dtPanYVal');
     this.elBtnResetImagePos = document.getElementById('btnResetImagePos');
+    this.elBtnDtClearImage = document.getElementById('btnDtClearImage');
     this.elDtTitleSize = document.getElementById('dtTitleSize');
     this.elDtTitleSizeVal = document.getElementById('dtTitleSizeVal');
     this.elDtPriceSize = document.getElementById('dtPriceSize');
@@ -194,6 +214,7 @@ class PriceTagApp {
     this.elQeUnit = document.getElementById('qeUnit');
     this.elQeSavings = document.getElementById('qeSavings');
     this.elQeImageUpload = document.getElementById('qeImageUpload');
+    this.elBtnQeClearImage = document.getElementById('btnQeClearImage');
     this.elBtnSaveQuickEdit = document.getElementById('btnSaveQuickEdit');
     this.elBtnOpenInDesigner = document.getElementById('btnOpenInDesigner');
     this.elBtnDownloadQePNG = document.getElementById('btnDownloadQePNG');
@@ -266,6 +287,22 @@ class PriceTagApp {
           this.settings.mrpBadgeMode === 'hide'
             ? 'MRP and Save badges are now HIDDEN on all tags.'
             : 'MRP and Save badges enabled (will only show for items with MRP).',
+          'info'
+        );
+      });
+    }
+
+    if (this.elImageDisplayToggle) {
+      this.elImageDisplayToggle.addEventListener('change', () => {
+        this.settings.imageDisplay = this.elImageDisplayToggle.value;
+        this.saveToStorage();
+        this.renderA4Sheets();
+        this.renderDesignerTag();
+        this.renderTableRows();
+        this.notify(
+          this.settings.imageDisplay === 'clear'
+            ? 'Product images hidden / cleared. All tags and posters are now aligned in the middle!'
+            : 'Product images enabled.',
           'info'
         );
       });
@@ -359,6 +396,30 @@ class PriceTagApp {
           this.render();
           this.notify('Removed MRP from all tags successfully!', 'success');
         }
+      });
+    }
+    if (this.elBtnClearAllImages) {
+      this.elBtnClearAllImages.addEventListener('click', () => {
+        if (confirm('Clear product images from all tags?')) {
+          this.tags.forEach(t => { t.image = ''; });
+          this.saveToStorage();
+          this.render();
+          this.notify('Cleared all images. All tags and posters are now aligned in the middle!', 'success');
+        }
+      });
+    }
+    if (this.elBtnLoadUploadedSample) {
+      this.elBtnLoadUploadedSample.addEventListener('click', () => {
+        this.tags = JSON.parse(JSON.stringify(UPLOADED_REFERENCE_PRODUCTS));
+        this.settings.grid = '3x4';
+        this.settings.mrpBadgeMode = 'auto';
+        this.settings.imageDisplay = 'show';
+        if (this.elGridPreset) this.elGridPreset.value = '3x4';
+        if (this.elMrpBadgeToggle) this.elMrpBadgeToggle.value = 'auto';
+        if (this.elImageDisplayToggle) this.elImageDisplayToggle.value = 'show';
+        this.saveToStorage();
+        this.render();
+        this.notify('Loaded 12 Reference Items from the uploaded sample in 3x4 Grid!', 'success');
       });
     }
     if (this.elBtnLoadPosterSample) {
@@ -473,6 +534,21 @@ class PriceTagApp {
       }
     });
 
+    if (this.elBtnDtClearImage) {
+      this.elBtnDtClearImage.addEventListener('click', () => {
+        const tag = this.tags[this.selectedTagIndex];
+        if (tag) {
+          tag.image = '';
+          if (this.elDtImageUpload) this.elDtImageUpload.value = '';
+          this.saveToStorage();
+          this.renderDesignerTag();
+          this.renderA4Sheets();
+          this.renderTableRows();
+          this.notify(`Cleared image for tag #${this.selectedTagIndex + 1}`, 'info');
+        }
+      });
+    }
+
     this.elDtTitleSize.addEventListener('input', () => {
       const val = parseInt(this.elDtTitleSize.value, 10);
       this.elDtTitleSizeVal.textContent = `${val}%`;
@@ -500,6 +576,21 @@ class PriceTagApp {
     });
 
     // Quick Edit modal save
+    if (this.elBtnQeClearImage) {
+      this.elBtnQeClearImage.addEventListener('click', () => {
+        const idx = parseInt(this.elQeTagId.textContent, 10) - 1;
+        const tag = this.tags[idx];
+        if (tag) {
+          tag.image = '';
+          if (this.elQeImageUpload) this.elQeImageUpload.value = '';
+          this.saveToStorage();
+          this.renderA4Sheets();
+          this.renderTableRows();
+          this.notify(`Cleared image for tag #${idx + 1}`, 'info');
+        }
+      });
+    }
+
     this.elBtnSaveQuickEdit.addEventListener('click', () => {
       const idx = parseInt(this.elQeTagId.textContent, 10) - 1;
       const tag = this.tags[idx];
@@ -593,6 +684,23 @@ class PriceTagApp {
   loadInitialData() {
     try {
       const urlParams = new URLSearchParams(window.location.search);
+      const urlImagesClear = (urlParams.get('images') === 'clear' || urlParams.get('image') === 'clear');
+      if (urlImagesClear) {
+        this.settings.imageDisplay = 'clear';
+      }
+      if (urlParams.get('sample') === 'uploaded' || urlParams.get('sample') === 'upload' || urlParams.get('sample') === '12') {
+        this.tags = JSON.parse(JSON.stringify(UPLOADED_REFERENCE_PRODUCTS));
+        this.settings.grid = urlParams.get('grid') || '3x4';
+        this.settings.mrpBadgeMode = 'auto';
+        if (!urlImagesClear) {
+          this.settings.imageDisplay = 'show';
+        }
+        this.saveToStorage();
+        this.syncSettingsUI();
+        this.render();
+        this.notify('Loaded 12 Reference Items from the uploaded sample in 3x4 Grid!', 'success');
+        return;
+      }
       if (urlParams.get('sample') === 'posters' || urlParams.get('sample') === 'poster') {
         this.tags = JSON.parse(JSON.stringify(REFERENCE_POSTER_PRODUCTS));
         this.settings.grid = urlParams.get('grid') || 'landscape-2x2';
@@ -669,12 +777,16 @@ class PriceTagApp {
     if (this.elMrpBadgeToggle) {
       this.elMrpBadgeToggle.value = this.settings.mrpBadgeMode || 'auto';
     }
+    if (this.elImageDisplayToggle) {
+      this.elImageDisplayToggle.value = this.settings.imageDisplay || 'show';
+    }
   }
 
   loadSampleData(notifyUser = true) {
     this.tags = JSON.parse(JSON.stringify(DEFAULT_SAMPLE_PRODUCTS));
     this.settings.grid = '4x5';
     this.settings.mrpBadgeMode = 'auto';
+    this.settings.imageDisplay = 'show';
     this.saveToStorage();
     this.render();
     if (notifyUser) {
@@ -1674,15 +1786,21 @@ class PriceTagApp {
     const badgeMode = this.settings.mrpBadgeMode || 'auto';
     const numMrp = Number(tag.mrp || 0);
     const numOffer = Number(tag.offerPrice || 0);
-    const hasMrp = (badgeMode !== 'hide') && numMrp > 0 && numMrp > numOffer;
-    const mrpVal = hasMrp ? numMrp.toFixed(1) : '';
+    const hasMrp = (badgeMode !== 'hide') && numMrp > 0;
+    const mrpVal = hasMrp ? numMrp.toFixed(2) : '';
     const offerVal = (tag.offerPrice !== undefined && tag.offerPrice !== null) ? numOffer.toFixed(2) : '0.00';
-    const savings = hasMrp ? Math.max(0, numMrp - numOffer).toFixed(2) : '0.00';
+    const hasDiscount = hasMrp && numOffer > 0 && numMrp > numOffer;
+    const discountPercent = hasDiscount ? Math.round(((numMrp - numOffer) / numMrp) * 100) : 0;
+    const savings = hasDiscount ? Math.max(0, numMrp - numOffer).toFixed(2) : '0.00';
     const store = tag.storeName || this.settings.storeName;
     const unitText = tag.unit ? ` / ${tag.unit}` : '';
 
-    const hasImage = Boolean(tag.image && tag.image.trim().length > 0);
-    card.className = `price-tag-card ${isPosterStyle ? 'poster-style' : ''} ${hasImage ? 'has-image' : 'no-image'} ${hasMrp ? 'has-badges' : 'no-badges'}`;
+    const showImages = this.settings.imageDisplay !== 'clear';
+    const hasImage = Boolean(showImages && tag.image && tag.image.trim().length > 0);
+    const isCenteredPoster = isPosterStyle && !hasImage;
+    const isCenteredShelfTag = !isPosterStyle && !hasImage;
+
+    card.className = `price-tag-card ${isPosterStyle ? 'poster-style' : ''} ${isCenteredPoster ? 'poster-centered' : ''} ${isCenteredShelfTag ? 'tag-centered' : ''} ${hasImage ? 'has-image' : 'no-image'} ${hasMrp ? 'has-badges' : 'no-badges'}`;
     card.dataset.index = index;
 
     const imgScale = tag.imageScale || 1.0;
@@ -1736,7 +1854,7 @@ class PriceTagApp {
     shrinkFactor = Math.max(0.30, shrinkFactor);
 
     // Auto-shrink factor for price & unit to guarantee it fits inside the column
-    const fullPriceStr = `${offerVal}${unitText}`;
+    const fullPriceStr = `${this.settings.currency}${offerVal}${unitText}`;
     let priceShrink = 1.0;
     if (fullPriceStr.length >= 14) {
       priceShrink = 0.70;
@@ -1754,105 +1872,170 @@ class PriceTagApp {
     card.style.setProperty('--price-shrink', priceShrink);
 
     if (isPosterStyle) {
-      // Detected A4 Landscape Split Poster Style (Left 40% Image, Right 60% Info & Price)
-      card.innerHTML = `
-        <div class="poster-left-col">
-          ${hasImage ? `
+      if (hasImage) {
+        // Detected A4 Landscape Split Poster Style (Left 40% Image, Right 60% Info & Price)
+        card.innerHTML = `
+          <div class="poster-left-col">
             <img src="${tag.image}" 
                  class="poster-img" 
                  style="transform: translate(${imgX}px, ${imgY}px) scale(${imgScale});" 
                  alt="${tag.title}">
-          ` : `
-            <div class="poster-img-placeholder">
-              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-              <span>+ Product Photo</span>
-            </div>
-          `}
-        </div>
-
-        <div class="poster-right-col">
-          <!-- Top Store Logo -->
-          <div class="poster-logo-row">
-            <img src="BIGSAVE.PNG" class="poster-top-logo" alt="BIG SAVE Smile">
           </div>
 
-          <!-- Badges Row: MRP with Red Strike & Save Badge -->
-          ${hasMrp ? `
-          <div class="poster-badge-row">
-            <div class="poster-mrp-box">
-              <span class="poster-mrp-label">MRP </span>
-              <span class="poster-mrp-val mrp-strike">${mrpVal}</span>
+          <div class="poster-right-col">
+            <!-- Top Store Logo -->
+            <div class="poster-logo-row">
+              <img src="BIGSAVE.PNG" class="poster-top-logo" alt="BIG SAVE Smile">
             </div>
-            <div class="save-badge poster-save-badge">
-              <span>SAVE ${this.settings.currency}${savings}</span>
-            </div>
-          </div>
-          ` : ''}
 
-          <!-- Product Title (Heavy Condensed Black Sans-Serif, Centered) -->
-          <div class="poster-title-row">
-            <div class="poster-title-text tag-title-text">
-              ${tag.title || 'SPECIAL OFFER'}
+            <!-- Badges Row: MRP with Strike & Save Badge -->
+            ${hasMrp ? `
+            <div class="poster-badge-row">
+              <div class="poster-mrp-box">
+                <span class="poster-mrp-label">MRP </span>
+                <span class="poster-mrp-val mrp-strike">${this.settings.currency}${mrpVal}</span>
+              </div>
+              ${hasDiscount ? `
+              <div class="save-badge poster-save-badge">
+                <span>SAVE ${this.settings.currency}${savings}</span>
+              </div>` : ''}
             </div>
-          </div>
+            ` : ''}
 
-          <!-- Price & Unit (Massive Black Font, Centered) -->
-          <div class="poster-price-row">
-            <div class="poster-price-text">
-              ${offerVal}<span class="poster-unit-text">${unitText}</span>
+            <!-- Product Title (Heavy Condensed Black Sans-Serif, Centered) -->
+            <div class="poster-title-row">
+              <div class="poster-title-text tag-title-text">
+                ${tag.title || 'SPECIAL OFFER'}
+              </div>
+            </div>
+
+            <!-- Price & Unit (Massive Black Font, Centered) -->
+            <div class="poster-price-row">
+              <div class="poster-price-text">
+                ${this.settings.currency}${offerVal}<span class="poster-unit-text">${unitText}</span>
+              </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        // Poster with no image / image cleared: MOVE EVERYTHING IN THE MIDDLE!
+        card.innerHTML = `
+          <div class="poster-centered-content">
+            <!-- Top Store Logo (Centered) -->
+            <div class="poster-logo-row">
+              <img src="BIGSAVE.PNG" class="poster-top-logo" alt="BIG SAVE Smile">
+            </div>
+
+            <!-- Badges Row: MRP with Strike & Save Badge (Centered) -->
+            ${hasMrp ? `
+            <div class="poster-badge-row">
+              <div class="poster-mrp-box">
+                <span class="poster-mrp-label">MRP </span>
+                <span class="poster-mrp-val mrp-strike">${this.settings.currency}${mrpVal}</span>
+              </div>
+              ${hasDiscount ? `
+              <div class="save-badge poster-save-badge">
+                <span>SAVE ${this.settings.currency}${savings}</span>
+              </div>` : ''}
+            </div>
+            ` : ''}
+
+            <!-- Product Title (Centered in Middle) -->
+            <div class="poster-title-row">
+              <div class="poster-title-text">
+                ${tag.title || 'SPECIAL OFFER'}
+              </div>
+            </div>
+
+            <!-- Price & Unit (Centered in Middle) -->
+            <div class="poster-price-row">
+              <div class="poster-price-text">
+                ${this.settings.currency}${offerVal}<span class="poster-unit-text">${unitText}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
     } else {
-      // Standard Retail Shelf Tag
-      card.innerHTML = `
-        ${hasImage ? `
-        <div class="tag-bg-layer">
-          <img src="${tag.image}" 
-               class="tag-bg-img" 
-               style="transform: translate(${imgX}px, ${imgY}px) scale(${imgScale});" 
-               alt="${tag.title}">
-        </div>` : ''}
-
-        <div class="tag-content-layer ${hasMrp ? 'has-badges' : 'no-badges'}">
-          <!-- Store Brand Logo (Permanently on top of each price tag) -->
-          <div class="tag-logo-row">
-            <img src="BIGSAVE.PNG" class="tag-top-logo" alt="BIG SAVE Smile">
-          </div>
-
-          <!-- Top Badges / MRP & Saving Row -->
-          ${hasMrp ? `
-          <div class="tag-badge-row">
-            <div class="mrp-text-nobadge">
-              <span>MRP </span>
-              <span class="mrp-strike">${mrpVal}</span>
+      if (hasImage) {
+        // Standard Retail Shelf Tag (Upward Alignment matching Uploaded Tag Styles)
+        card.innerHTML = `
+          <div class="tag-content-layer ${hasMrp ? 'has-badges' : 'no-badges'}">
+            <!-- Store Brand Logo (Permanently at top) -->
+            <div class="tag-logo-row">
+              <img src="BIGSAVE.PNG" class="tag-top-logo" alt="BIG SAVE Smile">
             </div>
-            <div class="save-badge">
-              <span>SAVE ${this.settings.currency}${savings}</span>
-            </div>
-          </div>
-          ` : ''}
 
-          <!-- Product Title (Thick Big Black Font) -->
-          <div class="tag-title-row">
-            <div class="tag-title-text">
-              ${tag.title || 'SPECIAL OFFER'}
+            <!-- Top MRP & Discount Row (directly below logo) -->
+            ${hasMrp ? `
+            <div class="tag-mrp-row">
+              <span class="mrp-label">MRP </span>
+              <span class="mrp-strike">${this.settings.currency}${mrpVal}</span>
+              ${hasDiscount ? `<span class="discount-badge">${discountPercent}% OFF</span>` : ''}
             </div>
-          </div>
+            ` : ''}
 
-          <!-- Price & Unit (Thick Big Black Font) -->
-          <div class="tag-price-row">
-            <div class="tag-price-text">
-              ${offerVal}<span class="tag-unit-text">${unitText}</span>
+            <!-- Product Title (Upward, centered below MRP) -->
+            <div class="tag-title-row">
+              <div class="tag-title-text">
+                ${tag.title || 'SPECIAL OFFER'}
+              </div>
+            </div>
+
+            <!-- Middle Product Image Area (Cleanly contained in middle) -->
+            <div class="tag-image-middle">
+              <img src="${tag.image}" 
+                   class="tag-product-img" 
+                   style="transform: translate(${imgX}px, ${imgY}px) scale(${imgScale});" 
+                   alt="${tag.title}">
+            </div>
+
+            <!-- Bottom Price Row (Yellow Highlight Box for Price + Unit) -->
+            <div class="tag-price-row">
+              <div class="tag-price-container">
+                <span class="tag-price-yellow-box">${this.settings.currency}${offerVal}</span>
+                ${tag.unit ? `<span class="tag-unit-text"> / ${tag.unit}</span>` : ''}
+              </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        // Standard Retail Shelf Tag (No image / image cleared: Centered in Middle!)
+        card.innerHTML = `
+          <div class="tag-content-layer tag-centered-layer ${hasMrp ? 'has-badges' : 'no-badges'}">
+            <div class="tag-centered-inner">
+              <!-- Store Brand Logo (Centered in Middle) -->
+              <div class="tag-logo-row">
+                <img src="BIGSAVE.PNG" class="tag-top-logo" alt="BIG SAVE Smile">
+              </div>
+
+              <!-- Top MRP & Discount Row (Centered in Middle) -->
+              ${hasMrp ? `
+              <div class="tag-mrp-row">
+                <span class="mrp-label">MRP </span>
+                <span class="mrp-strike">${this.settings.currency}${mrpVal}</span>
+                ${hasDiscount ? `<span class="discount-badge">${discountPercent}% OFF</span>` : ''}
+              </div>
+              ` : ''}
+
+              <!-- Product Title (Centered in Middle) -->
+              <div class="tag-title-row">
+                <div class="tag-title-text">
+                  ${tag.title || 'SPECIAL OFFER'}
+                </div>
+              </div>
+
+              <!-- Price Row (Yellow Box + Unit Centered in Middle) -->
+              <div class="tag-price-row">
+                <div class="tag-price-container">
+                  <span class="tag-price-yellow-box">${this.settings.currency}${offerVal}</span>
+                  ${tag.unit ? `<span class="tag-unit-text"> / ${tag.unit}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
     }
 
     card.addEventListener('click', () => {
@@ -1953,13 +2136,16 @@ class PriceTagApp {
         <tr data-index="${idx}">
           <td>${idx + 1}</td>
           <td>
-            <label class="thumb-cell-wrapper" title="${tag.image ? 'Click to replace photo' : 'Click to upload photo'}">
-              ${tag.image 
-                ? `<img src="${tag.image}" class="table-thumb" alt="Product">`
-                : `<div class="table-thumb-empty" title="Upload Photo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>+ Photo</span></div>`
-              }
-              <input type="file" accept="image/*" class="table-row-img-input" data-index="${idx}">
-            </label>
+            <div style="display:flex;align-items:center;gap:4px;">
+              <label class="thumb-cell-wrapper" title="${tag.image ? 'Click to replace photo' : 'Click to upload photo'}">
+                ${tag.image 
+                  ? `<img src="${tag.image}" class="table-thumb" alt="Product">`
+                  : `<div class="table-thumb-empty" title="Upload Photo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>+ Photo</span></div>`
+                }
+                <input type="file" accept="image/*" class="table-row-img-input" data-index="${idx}">
+              </label>
+              ${tag.image ? `<button type="button" class="btn-icon danger tbl-btn-clear-img" data-index="${idx}" title="Clear image" style="padding:2px 4px;font-size:14px;line-height:1;border:none;background:none;cursor:pointer;">&times;</button>` : ''}
+            </div>
           </td>
           <td>
             <input type="text" class="table-input tbl-title" data-index="${idx}" value="${tag.title}">
@@ -2055,6 +2241,18 @@ class PriceTagApp {
             this.render();
           };
           reader.readAsDataURL(file);
+        }
+      });
+    });
+
+    this.elTableBody.querySelectorAll('.tbl-btn-clear-img').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(e.currentTarget.dataset.index, 10);
+        if (this.tags[idx]) {
+          this.tags[idx].image = '';
+          this.saveToStorage();
+          this.render();
+          this.notify(`Cleared image for item #${idx + 1}`, 'info');
         }
       });
     });
@@ -2268,27 +2466,32 @@ class PriceTagApp {
     const badgeMode = this.settings.mrpBadgeMode || 'auto';
     const numMrp = Number(tag.mrp || 0);
     const numOffer = Number(tag.offerPrice || 0);
-    const hasMrp = (badgeMode !== 'hide') && numMrp > 0 && numMrp > numOffer;
-    const mrpVal = hasMrp ? numMrp.toFixed(1) : '';
-    const savings = hasMrp ? Math.max(0, numMrp - numOffer).toFixed(2) : '0.00';
+    const hasMrp = (badgeMode !== 'hide') && numMrp > 0;
+    const mrpVal = hasMrp ? numMrp.toFixed(2) : '';
+    const hasDiscount = hasMrp && numOffer > 0 && numMrp > numOffer;
+    const discountPercent = hasDiscount ? Math.round(((numMrp - numOffer) / numMrp) * 100) : 0;
+    const savings = hasDiscount ? Math.max(0, numMrp - numOffer).toFixed(2) : '0.00';
     const store = tag.storeName || this.settings.storeName;
     const globalBoost = (this.settings.globalFontScale || 135) / 100;
     const offerVal = Number(tag.offerPrice || 0).toFixed(2);
     const unitText = tag.unit ? ` / ${tag.unit}` : '';
-    const fullPriceStr = `${offerVal}${unitText}`;
+    const fullPriceStr = `${this.settings.currency}${offerVal}${unitText}`;
     const titleStr = (tag.title || 'SPECIAL OFFER').trim().toUpperCase();
 
-    if (isPoster) {
-      // =====================================================================
-      // DETECTED POSTER STYLE: Horizontal Split (Left 40% Image, Right 60% Info)
-      // =====================================================================
-      const leftW = Math.round(width * 0.40);
-      const rightX = x + leftW;
-      const rightW = width - leftW;
-      const centerX = rightX + Math.round(rightW / 2);
+    const showImages = this.settings.imageDisplay !== 'clear';
+    const hasImage = Boolean(showImages && tag.image && tag.image.trim().length > 0);
 
-      // 1. Left Product Image (Clean contain layout on white background)
-      if (tag.image) {
+    if (isPoster) {
+      if (hasImage) {
+        // =====================================================================
+        // DETECTED POSTER STYLE: Horizontal Split (Left 40% Image, Right 60% Info)
+        // =====================================================================
+        const leftW = Math.round(width * 0.40);
+        const rightX = x + leftW;
+        const rightW = width - leftW;
+        const centerX = rightX + Math.round(rightW / 2);
+
+        // 1. Left Product Image (Clean contain layout on white background)
         try {
           const img = await this.loadImageAsync(tag.image, imgCache);
           const padX = Math.round(leftW * 0.05);
@@ -2326,279 +2529,532 @@ class PriceTagApp {
         } catch (e) {
           console.warn('Could not load tag image for poster canvas export:', e);
         }
-      }
 
-      // 2. Right Section - Store Logo (BIGSAVE.PNG)
-      const logoY = y + Math.round(height * 0.04);
-      const logoMaxH = Math.round(height * 0.125);
+        // 2. Right Section - Store Logo (BIGSAVE.PNG)
+        const logoY = y + Math.round(height * 0.04);
+        const logoMaxH = Math.round(height * 0.125);
+        try {
+          const logoImg = await this.loadImageAsync('BIGSAVE.PNG', imgCache);
+          const aspect = (logoImg.naturalWidth || logoImg.width) / (logoImg.naturalHeight || logoImg.height);
+          const logoH = logoMaxH;
+          const logoW = Math.min(Math.round(logoH * aspect), Math.round(rightW * 0.65));
+          const actualH = Math.round(logoW / aspect);
+          const logoX = centerX - Math.round(logoW / 2);
+          ctx.drawImage(logoImg, logoX, logoY, logoW, actualH);
+        } catch (e) {
+          console.warn('Could not draw store logo on poster canvas:', e);
+        }
+
+        // 3. Right Section - Badges Row (MRP & Save Badge)
+        if (hasMrp) {
+          const badgeY = y + Math.round(height * 0.19);
+          const badgeH = Math.round(height * 0.088);
+          const mrpFontSize = Math.round(badgeH * 0.58);
+          ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+
+          const mrpPrefix = "MRP ";
+          const mrpPrefixW = ctx.measureText(mrpPrefix).width;
+          const mrpNumStr = `${this.settings.currency}${mrpVal}`;
+          const mrpNumW = ctx.measureText(mrpNumStr).width;
+          const mrpTotalW = mrpPrefixW + mrpNumW;
+
+          const saveText = hasDiscount ? `SAVE ${this.settings.currency}${savings}` : '';
+          const saveFontSize = Math.round(badgeH * 0.60);
+          ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+          const saveTextW = saveText ? ctx.measureText(saveText).width : 0;
+          const saveBadgeW = saveTextW;
+
+          const badgeGap = Math.round(rightW * 0.025);
+          const totalBadgesW = hasDiscount ? (mrpTotalW + badgeGap + saveBadgeW) : mrpTotalW;
+          const startBadgeX = centerX - (totalBadgesW / 2);
+          const badgeCenterY = badgeY + badgeH / 2;
+
+          // Draw MRP Text
+          ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#000000';
+          ctx.fillText(mrpPrefix, startBadgeX, badgeCenterY);
+          ctx.fillText(mrpNumStr, startBadgeX + mrpPrefixW, badgeCenterY);
+
+          // Horizontal strikethrough over mrpVal
+          ctx.strokeStyle = '#d80000';
+          ctx.lineWidth = Math.max(2.5, Math.round(badgeH * 0.09));
+          ctx.beginPath();
+          ctx.moveTo(startBadgeX + mrpPrefixW - 2, badgeCenterY);
+          ctx.lineTo(startBadgeX + mrpTotalW + 2, badgeCenterY);
+          ctx.stroke();
+
+          // Draw Save Badge if discount
+          if (hasDiscount) {
+            const saveBadgeX = startBadgeX + mrpTotalW + badgeGap;
+            ctx.fillStyle = '#d80000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+            ctx.fillText(saveText, saveBadgeX, badgeCenterY);
+
+            // Double Underline for Save Text
+            const lineThick = Math.max(2, Math.round(badgeH * 0.05));
+            const lineGap = Math.max(2, Math.round(badgeH * 0.04));
+            const underlineY1 = Math.round(badgeCenterY + saveFontSize * 0.52);
+            const underlineY2 = underlineY1 + lineThick + lineGap;
+            ctx.strokeStyle = '#d80000';
+            ctx.lineWidth = lineThick;
+            ctx.beginPath();
+            ctx.moveTo(saveBadgeX, underlineY1);
+            ctx.lineTo(saveBadgeX + saveTextW, underlineY1);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(saveBadgeX, underlineY2);
+            ctx.lineTo(saveBadgeX + saveTextW, underlineY2);
+            ctx.stroke();
+          }
+        }
+
+        // 4. Right Section - Product Title
+        const words = titleStr.split(/\s+/).filter(w => w.length > 0);
+        let lines = [];
+        if (words.length <= 2) {
+          lines = words.length === 2 && titleStr.length > 12 ? [words[0], words[1]] : [titleStr];
+        } else if (words.length === 3) {
+          if (words[0].length >= 7 || words[1].length + words[2].length <= 14) {
+            lines = [words[0], `${words[1]} ${words[2]}`];
+          } else {
+            lines = [`${words[0]} ${words[1]}`, words[2]];
+          }
+        } else if (words.length >= 4) {
+          const mid = Math.ceil(words.length / 2);
+          lines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+        } else {
+          lines = [titleStr];
+        }
+
+        const maxTitleW = rightW - Math.round(rightW * 0.08);
+        const titleTopY = hasMrp ? y + Math.round(height * 0.32) : y + Math.round(height * 0.20);
+        const titleBottomY = y + Math.round(height * 0.74);
+        const titleAvailH = titleBottomY - titleTopY;
+        const titleCenterY = titleTopY + titleAvailH / 2;
+
+        let titleFontSize = Math.round(height * 0.125 * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15));
+        ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+
+        let maxLineW = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 0);
+        if (maxLineW > maxTitleW) {
+          titleFontSize = Math.max(12, Math.floor(titleFontSize * (maxTitleW / maxLineW)));
+          ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        }
+        const totalTextH = lines.length * titleFontSize * 0.95;
+        if (totalTextH > titleAvailH) {
+          titleFontSize = Math.max(10, Math.floor(titleFontSize * (titleAvailH / totalTextH)));
+          ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        }
+
+        const stepY = titleFontSize * 0.95;
+        const startY = titleCenterY - ((lines.length - 1) * stepY) / 2;
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        lines.forEach((line, i) => {
+          ctx.fillText(line, centerX, startY + (i * stepY));
+        });
+
+        // 5. Right Section - Price & Unit
+        const priceCenterY = y + Math.round(height * 0.86);
+        let priceFontSize = Math.round(height * 0.18 * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15));
+        ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        let priceW = ctx.measureText(fullPriceStr).width;
+        const maxPriceW = rightW - Math.round(rightW * 0.06);
+        if (priceW > maxPriceW) {
+          priceFontSize = Math.max(16, Math.floor(priceFontSize * (maxPriceW / priceW)));
+          ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        }
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(fullPriceStr, centerX, priceCenterY);
+
+        ctx.restore();
+        return;
+      } else {
+        // =====================================================================
+        // POSTER CENTERED STYLE: "move Every thing in the middle"
+        // =====================================================================
+        const centerX = x + Math.round(width / 2);
+
+        // 1. Store Logo (Centered in middle)
+        const logoY = y + Math.round(height * 0.08);
+        const logoMaxH = Math.round(height * 0.16);
+        let actualLogoH = logoMaxH;
+        try {
+          const logoImg = await this.loadImageAsync('BIGSAVE.PNG', imgCache);
+          const aspect = (logoImg.naturalWidth || logoImg.width) / (logoImg.naturalHeight || logoImg.height);
+          const logoH = logoMaxH;
+          const logoW = Math.min(Math.round(logoH * aspect), Math.round(width * 0.55));
+          actualLogoH = Math.round(logoW / aspect);
+          const logoX = centerX - Math.round(logoW / 2);
+          ctx.drawImage(logoImg, logoX, logoY, logoW, actualLogoH);
+        } catch (e) {
+          console.warn('Could not draw store logo on centered poster canvas:', e);
+        }
+
+        // 2. Badges Row: MRP & Save Badge (Centered in middle)
+        let badgeBottomY = logoY + actualLogoH;
+        if (hasMrp) {
+          const badgeY = logoY + actualLogoH + Math.round(height * 0.035);
+          const badgeH = Math.round(height * 0.09);
+          const mrpFontSize = Math.round(badgeH * 0.58);
+          ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+
+          const mrpPrefix = "MRP ";
+          const mrpPrefixW = ctx.measureText(mrpPrefix).width;
+          const mrpNumStr = `${this.settings.currency}${mrpVal}`;
+          const mrpNumW = ctx.measureText(mrpNumStr).width;
+          const mrpTotalW = mrpPrefixW + mrpNumW;
+
+          const saveText = hasDiscount ? `SAVE ${this.settings.currency}${savings}` : '';
+          const saveFontSize = Math.round(badgeH * 0.60);
+          ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+          const saveTextW = saveText ? ctx.measureText(saveText).width : 0;
+
+          const badgeGap = Math.round(width * 0.025);
+          const totalBadgesW = hasDiscount ? (mrpTotalW + badgeGap + saveTextW) : mrpTotalW;
+          const startBadgeX = centerX - (totalBadgesW / 2);
+          const badgeCenterY = badgeY + badgeH / 2;
+
+          ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#000000';
+          ctx.fillText(mrpPrefix, startBadgeX, badgeCenterY);
+          ctx.fillText(mrpNumStr, startBadgeX + mrpPrefixW, badgeCenterY);
+
+          // Red strikethrough over mrpVal
+          ctx.strokeStyle = '#d80000';
+          ctx.lineWidth = Math.max(2.5, Math.round(badgeH * 0.09));
+          ctx.beginPath();
+          ctx.moveTo(startBadgeX + mrpPrefixW - 2, badgeCenterY);
+          ctx.lineTo(startBadgeX + mrpTotalW + 2, badgeCenterY);
+          ctx.stroke();
+
+          if (hasDiscount) {
+            const saveBadgeX = startBadgeX + mrpTotalW + badgeGap;
+            ctx.fillStyle = '#d80000';
+            ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+            ctx.fillText(saveText, saveBadgeX, badgeCenterY);
+
+            const lineThick = Math.max(2, Math.round(badgeH * 0.05));
+            const lineGap = Math.max(2, Math.round(badgeH * 0.04));
+            const underlineY1 = Math.round(badgeCenterY + saveFontSize * 0.52);
+            const underlineY2 = underlineY1 + lineThick + lineGap;
+            ctx.strokeStyle = '#d80000';
+            ctx.lineWidth = lineThick;
+            ctx.beginPath();
+            ctx.moveTo(saveBadgeX, underlineY1);
+            ctx.lineTo(saveBadgeX + saveTextW, underlineY1);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(saveBadgeX, underlineY2);
+            ctx.lineTo(saveBadgeX + saveTextW, underlineY2);
+            ctx.stroke();
+          }
+          badgeBottomY = badgeY + badgeH;
+        }
+
+        // 3. Product Title (Centered in middle)
+        const words = titleStr.split(/\s+/).filter(w => w.length > 0);
+        let lines = [];
+        if (words.length <= 2) {
+          lines = words.length === 2 && titleStr.length > 14 ? [words[0], words[1]] : [titleStr];
+        } else if (words.length === 3) {
+          lines = [words[0], `${words[1]} ${words[2]}`];
+        } else if (words.length >= 4) {
+          const mid = Math.ceil(words.length / 2);
+          lines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+        } else {
+          lines = [titleStr];
+        }
+
+        const maxTitleW = width - Math.round(width * 0.12);
+        const titleTopY = badgeBottomY + Math.round(height * 0.04);
+        const titleBottomY = y + Math.round(height * 0.74);
+        const titleAvailH = Math.max(20, titleBottomY - titleTopY);
+        const titleCenterY = titleTopY + titleAvailH / 2;
+
+        let titleFontSize = Math.round(height * 0.13 * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15));
+        ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+
+        let maxLineW = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 0);
+        if (maxLineW > maxTitleW) {
+          titleFontSize = Math.max(14, Math.floor(titleFontSize * (maxTitleW / maxLineW)));
+          ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        }
+        const totalTextH = lines.length * titleFontSize * 0.95;
+        if (totalTextH > titleAvailH) {
+          titleFontSize = Math.max(12, Math.floor(titleFontSize * (titleAvailH / totalTextH)));
+          ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        }
+
+        const stepY = titleFontSize * 0.95;
+        const startY = titleCenterY - ((lines.length - 1) * stepY) / 2;
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        lines.forEach((line, i) => {
+          ctx.fillText(line, centerX, startY + (i * stepY));
+        });
+
+        // 4. Price & Unit (Centered in middle)
+        const priceCenterY = y + Math.round(height * 0.86);
+        let priceFontSize = Math.round(height * 0.20 * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15));
+        ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        let priceW = ctx.measureText(fullPriceStr).width;
+        const maxPriceW = width - Math.round(width * 0.10);
+        if (priceW > maxPriceW) {
+          priceFontSize = Math.max(20, Math.floor(priceFontSize * (maxPriceW / priceW)));
+          ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        }
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(fullPriceStr, centerX, priceCenterY);
+
+        ctx.restore();
+        return;
+      }
+    }
+
+    // =========================================================================
+    // STANDARD RETAIL SHELF TAG CANVAS RENDERING (9 To Upward Tags)
+    // Matches the uploaded tag style: Logo -> MRP -> Title -> Middle Image -> Bottom Yellow Box Price
+    // =========================================================================
+    const centerX = x + Math.round(width / 2);
+
+    if (!hasImage) {
+      // =======================================================================
+      // 9 TO UPWARD TAGS: NO IMAGE / CLEAR MODE (CENTERED IN THE MIDDLE)
+      // Logo -> MRP & Discount -> Title -> Yellow Box Price + Unit
+      // All aligned and centered in the middle of the card!
+      // =======================================================================
+      ctx.save();
+
+      // Measure elements first to compute exact total height and center vertically
+      // 1. Logo
+      const logoMaxH = hasMrp ? Math.round(height * 0.12) : Math.round(height * 0.14);
+      let actualLogoH = logoMaxH;
+      let logoImg = null;
+      let logoW = 0;
       try {
-        const logoImg = await this.loadImageAsync('BIGSAVE.PNG', imgCache);
+        logoImg = await this.loadImageAsync('BIGSAVE.PNG', imgCache);
         const aspect = (logoImg.naturalWidth || logoImg.width) / (logoImg.naturalHeight || logoImg.height);
-        const logoH = logoMaxH;
-        const logoW = Math.min(Math.round(logoH * aspect), Math.round(rightW * 0.65));
-        const actualH = Math.round(logoW / aspect);
-        const logoX = centerX - Math.round(logoW / 2);
-        ctx.drawImage(logoImg, logoX, logoY, logoW, actualH);
+        logoW = Math.min(Math.round(logoMaxH * aspect), Math.round(width * 0.65));
+        actualLogoH = Math.round(logoW / aspect);
       } catch (e) {
-        console.warn('Could not draw store logo on poster canvas:', e);
+        console.warn('Could not load logo for canvas:', e);
       }
 
-      // 3. Right Section - Badges Row (MRP & Save Badge)
+      // 2. MRP & Discount
+      const mrpFontSize = Math.round(height * 0.052);
+      ctx.font = `800 ${mrpFontSize}px "Inter", "Arial Black", sans-serif`;
+      const mrpPrefix = "MRP ";
+      const mrpPrefixW = ctx.measureText(mrpPrefix).width;
+      const mrpNumStr = `${this.settings.currency}${mrpVal}`;
+      const mrpNumW = ctx.measureText(mrpNumStr).width;
+      const discStr = hasDiscount ? `  ${discountPercent}% OFF` : '';
+      const discW = discStr ? ctx.measureText(discStr).width : 0;
+      const totalMrpW = mrpPrefixW + mrpNumW + discW;
+      const actualMrpH = hasMrp ? mrpFontSize : 0;
+
+      // 3. Product Title
+      const words = titleStr.split(/\s+/).filter(w => w.length > 0);
+      let lines = [titleStr];
+      if (words.length > 1 && titleStr.length > 13) {
+        let bestSplitIdx = 1;
+        let minDiff = Infinity;
+        for (let i = 1; i < words.length; i++) {
+          const line1 = words.slice(0, i).join(' ');
+          const line2 = words.slice(i).join(' ');
+          const diff = Math.abs(line1.length - line2.length);
+          if (diff < minDiff) {
+            minDiff = diff;
+            bestSplitIdx = i;
+          }
+        }
+        lines = [words.slice(0, bestSplitIdx).join(' '), words.slice(bestSplitIdx).join(' ')];
+      }
+
+      const titleMaxW = width - Math.round(width * 0.08);
+      let titleFontSize = Math.round(height * 0.068 * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15));
+      ctx.font = `900 ${titleFontSize}px "Inter", "Arial Black", sans-serif`;
+      let maxLineW = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 0);
+      if (maxLineW > titleMaxW) {
+        titleFontSize = Math.max(10, Math.floor(titleFontSize * (titleMaxW / maxLineW)));
+        ctx.font = `900 ${titleFontSize}px "Inter", "Arial Black", sans-serif`;
+      }
+      const titleLineStep = Math.round(titleFontSize * 1.08);
+      const totalTitleH = lines.length * titleLineStep;
+
+      // 4. Price & Unit with Yellow Box
+      let priceFontSize = Math.round(height * 0.098 * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15));
+      let unitFontSize = Math.round(priceFontSize * 0.70);
+      const priceStr = `${this.settings.currency}${offerVal}`;
+
+      ctx.font = `900 ${priceFontSize}px "Inter", "Oswald", "Arial Black", sans-serif`;
+      let priceW = ctx.measureText(priceStr).width;
+      ctx.font = `900 ${unitFontSize}px "Inter", "Arial Black", sans-serif`;
+      let unitW = unitText ? ctx.measureText(unitText).width : 0;
+
+      const maxRowW = width - Math.round(width * 0.08);
+      if ((priceW + unitW + 24) > maxRowW) {
+        const shrink = maxRowW / (priceW + unitW + 24);
+        priceFontSize = Math.max(14, Math.floor(priceFontSize * shrink));
+        unitFontSize = Math.max(11, Math.floor(unitFontSize * shrink));
+        ctx.font = `900 ${priceFontSize}px "Inter", "Oswald", "Arial Black", sans-serif`;
+        priceW = ctx.measureText(priceStr).width;
+        ctx.font = `900 ${unitFontSize}px "Inter", "Arial Black", sans-serif`;
+        unitW = unitText ? ctx.measureText(unitText).width : 0;
+      }
+
+      const yellowPadX = Math.round(width * 0.03);
+      const yellowPadY = Math.max(4, Math.round(height * 0.015));
+      const yellowW = priceW + yellowPadX * 2;
+      const yellowH = priceFontSize + yellowPadY * 2;
+      const totalRowW = yellowW + (unitText ? (unitW + 6) : 0);
+      const rowStartX = centerX - Math.round(totalRowW / 2);
+
+      // Vertical Gaps
+      const gap = Math.round(height * 0.026);
+      const totalContentH = actualLogoH + (hasMrp ? (gap + actualMrpH) : 0) + gap + totalTitleH + gap + yellowH;
+      let curY = y + Math.max(8, Math.round((height - totalContentH) / 2));
+
+      // Draw 1: Logo
+      if (logoImg) {
+        const logoX = centerX - Math.round(logoW / 2);
+        ctx.drawImage(logoImg, logoX, curY, logoW, actualLogoH);
+      }
+      curY += actualLogoH + gap;
+
+      // Draw 2: MRP & Discount
       if (hasMrp) {
-        const badgeY = y + Math.round(height * 0.19);
-        const badgeH = Math.round(height * 0.088);
-        const mrpFontSize = Math.round(badgeH * 0.58);
-        ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        const mrpStartX = centerX - Math.round(totalMrpW / 2);
+        const mrpCenterY = curY + Math.round(mrpFontSize / 2);
 
-        const mrpPrefix = "MRP ";
-        const mrpPrefixW = ctx.measureText(mrpPrefix).width;
-        const mrpNumW = ctx.measureText(mrpVal).width;
-        const mrpTotalW = mrpPrefixW + mrpNumW;
-
-        const saveText = `SAVE ${this.settings.currency}${savings}`;
-        const saveFontSize = Math.round(badgeH * 0.60);
-        ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-        const saveTextW = ctx.measureText(saveText).width;
-        const saveBadgeW = saveTextW;
-
-        const badgeGap = Math.round(rightW * 0.025);
-        const totalBadgesW = mrpTotalW + badgeGap + saveBadgeW;
-        const startBadgeX = centerX - (totalBadgesW / 2);
-        const badgeCenterY = badgeY + badgeH / 2;
-
-        // Draw MRP Text
-        ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
+        ctx.font = `800 ${mrpFontSize}px "Inter", "Arial Black", sans-serif`;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#000000';
-        ctx.fillText(mrpPrefix, startBadgeX, badgeCenterY);
-        ctx.fillText(mrpVal, startBadgeX + mrpPrefixW, badgeCenterY);
+        ctx.fillText(mrpPrefix, mrpStartX, mrpCenterY);
+        ctx.fillText(mrpNumStr, mrpStartX + mrpPrefixW, mrpCenterY);
 
-        // Red horizontal strikethrough over mrpVal
-        ctx.strokeStyle = '#d80000';
-        ctx.lineWidth = Math.max(2.5, Math.round(badgeH * 0.09));
+        // Strikethrough
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = Math.max(1.5, Math.round(mrpFontSize * 0.09));
         ctx.beginPath();
-        ctx.moveTo(startBadgeX + mrpPrefixW - 2, badgeCenterY);
-        ctx.lineTo(startBadgeX + mrpTotalW + 2, badgeCenterY);
+        ctx.moveTo(mrpStartX + mrpPrefixW - 1, mrpCenterY);
+        ctx.lineTo(mrpStartX + mrpPrefixW + mrpNumW + 1, mrpCenterY);
         ctx.stroke();
 
-        // Draw Save Badge (No Fill, Red Font, Little larger, Double Underline)
-        const saveBadgeX = startBadgeX + mrpTotalW + badgeGap;
-        ctx.fillStyle = '#d80000';
+        if (hasDiscount) {
+          ctx.fillStyle = '#d80000';
+          ctx.fillText(discStr, mrpStartX + mrpPrefixW + mrpNumW, mrpCenterY);
+        }
+        curY += actualMrpH + gap;
+      }
+
+      // Draw 3: Product Title
+      ctx.font = `900 ${titleFontSize}px "Inter", "Arial Black", sans-serif`;
+      ctx.fillStyle = '#000000';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const titleStartY = curY + Math.round(titleFontSize / 2);
+      lines.forEach((line, i) => {
+        ctx.fillText(line, centerX, titleStartY + (i * titleLineStep));
+      });
+      curY += totalTitleH + gap;
+
+      // Draw 4: Yellow Box Price + Unit
+      const priceCenterY = curY + Math.round(yellowH / 2);
+      ctx.fillStyle = '#ffff00';
+      ctx.fillRect(rowStartX, curY, yellowW, yellowH);
+
+      ctx.font = `900 ${priceFontSize}px "Inter", "Oswald", "Arial Black", sans-serif`;
+      ctx.fillStyle = '#000000';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(priceStr, rowStartX + Math.round(yellowW / 2), priceCenterY);
+
+      if (unitText) {
+        ctx.font = `900 ${unitFontSize}px "Inter", "Arial Black", sans-serif`;
+        ctx.fillStyle = '#000000';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-        ctx.fillText(saveText, saveBadgeX, badgeCenterY);
-
-        // Double Underline for Save Text
-        const lineThick = Math.max(2, Math.round(badgeH * 0.05));
-        const lineGap = Math.max(2, Math.round(badgeH * 0.04));
-        const underlineY1 = Math.round(badgeCenterY + saveFontSize * 0.52);
-        const underlineY2 = underlineY1 + lineThick + lineGap;
-        ctx.strokeStyle = '#d80000';
-        ctx.lineWidth = lineThick;
-        ctx.beginPath();
-        ctx.moveTo(saveBadgeX, underlineY1);
-        ctx.lineTo(saveBadgeX + saveTextW, underlineY1);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(saveBadgeX, underlineY2);
-        ctx.lineTo(saveBadgeX + saveTextW, underlineY2);
-        ctx.stroke();
+        ctx.fillText(unitText, rowStartX + yellowW + 6, priceCenterY);
       }
-
-      // 4. Right Section - Product Title (Solid Black, Centered, No Stroke)
-      const words = titleStr.split(/\s+/).filter(w => w.length > 0);
-      let lines = [];
-      if (words.length <= 2) {
-        lines = words.length === 2 && titleStr.length > 12 ? [words[0], words[1]] : [titleStr];
-      } else if (words.length === 3) {
-        if (words[0].length >= 7 || words[1].length + words[2].length <= 14) {
-          lines = [words[0], `${words[1]} ${words[2]}`];
-        } else {
-          lines = [`${words[0]} ${words[1]}`, words[2]];
-        }
-      } else if (words.length >= 4) {
-        const mid = Math.ceil(words.length / 2);
-        lines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
-      } else {
-        lines = [titleStr];
-      }
-
-      const maxTitleW = rightW - Math.round(rightW * 0.08);
-      const titleTopY = hasMrp ? y + Math.round(height * 0.32) : y + Math.round(height * 0.20);
-      const titleBottomY = y + Math.round(height * 0.74);
-      const titleAvailH = titleBottomY - titleTopY;
-      const titleCenterY = titleTopY + titleAvailH / 2;
-
-      let titleFontSize = Math.round(height * 0.125 * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15));
-      ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-
-      let maxLineW = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 0);
-      if (maxLineW > maxTitleW) {
-        titleFontSize = Math.max(12, Math.floor(titleFontSize * (maxTitleW / maxLineW)));
-        ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-      }
-      const totalTextH = lines.length * titleFontSize * 0.95;
-      if (totalTextH > titleAvailH) {
-        titleFontSize = Math.max(10, Math.floor(titleFontSize * (titleAvailH / totalTextH)));
-        ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-      }
-
-      const stepY = titleFontSize * 0.95;
-      const startY = titleCenterY - ((lines.length - 1) * stepY) / 2;
-      ctx.fillStyle = '#000000';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      lines.forEach((line, i) => {
-        ctx.fillText(line, centerX, startY + (i * stepY));
-      });
-
-      // 5. Right Section - Price & Unit (Solid Black, Centered, No Stroke)
-      const priceCenterY = y + Math.round(height * 0.86);
-      let priceFontSize = Math.round(height * 0.18 * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15));
-      ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-      let priceW = ctx.measureText(fullPriceStr).width;
-      const maxPriceW = rightW - Math.round(rightW * 0.06);
-      if (priceW > maxPriceW) {
-        priceFontSize = Math.max(16, Math.floor(priceFontSize * (maxPriceW / priceW)));
-        ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Anton", "Arial Black", sans-serif`;
-      }
-      ctx.fillStyle = '#000000';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(fullPriceStr, centerX, priceCenterY);
 
       ctx.restore();
       return;
     }
 
-    // =========================================================================
-    // STANDARD RETAIL SHELF TAG CANVAS RENDERING
-    // =========================================================================
-    // Product image background (negative z-index backdrop)
-    if (tag.image) {
-      try {
-        const img = await this.loadImageAsync(tag.image, imgCache);
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(x, y, width, height);
-        ctx.clip();
-
-        const scale = (tag.imageScale || 1.0);
-        const panX = (tag.imageX || 0) * (width / 560);
-        const panY = (tag.imageY || 0) * (height / 393);
-
-        const dw = width;
-        const dh = height;
-
-        const dx = x + (width - dw * scale) / 2 + panX;
-        const dy = y + (height - dh * scale) / 2 + panY;
-
-        ctx.drawImage(img, dx, dy, dw * scale, dh * scale);
-        ctx.restore();
-      } catch (e) {
-        console.warn('Could not load tag image for canvas export:', e);
-      }
-    }
-
-    // Store Brand Logo (Permanently on top of each price tag)
-    const logoY = y + Math.round(height * 0.016);
-    const logoMaxH = hasMrp ? Math.round(height * 0.11) : Math.round(height * 0.15);
+    // 1. Store Brand Logo (Permanently on top of each price tag)
+    const logoY = y + Math.round(height * 0.025);
+    const logoMaxH = hasMrp ? Math.round(height * 0.09) : Math.round(height * 0.11);
+    let actualLogoH = logoMaxH;
     try {
       const logoImg = await this.loadImageAsync('BIGSAVE.PNG', imgCache);
       const aspect = (logoImg.naturalWidth || logoImg.width) / (logoImg.naturalHeight || logoImg.height);
       const logoH = logoMaxH;
-      const logoW = Math.min(Math.round(logoH * aspect), Math.round(width * 0.52));
-      const actualH = Math.round(logoW / aspect);
-      const logoX = x + Math.round((width - logoW) / 2);
-
-      // White pill background for crisp visibility against any backdrop
-      ctx.save();
-      ctx.fillStyle = '#ffffff';
-      const padX = Math.round(width * 0.015);
-      const padY = Math.max(1, Math.round(height * 0.005));
-      ctx.fillRect(logoX - padX, logoY - padY, logoW + padX * 2, actualH + padY * 2);
-      ctx.drawImage(logoImg, logoX, logoY, logoW, actualH);
-      ctx.restore();
+      const logoW = Math.min(Math.round(logoH * aspect), Math.round(width * 0.54));
+      actualLogoH = Math.round(logoW / aspect);
+      const logoX = centerX - Math.round(logoW / 2);
+      ctx.drawImage(logoImg, logoX, logoY, logoW, actualLogoH);
     } catch (e) {
       console.warn('Could not draw store logo on canvas:', e);
     }
 
-    const badgeY = y + Math.round(height * 0.14);
-    const badgeH = Math.round(height * 0.082);
-    const badgeX = x + Math.round(width * 0.035);
-
+    // 2. Top MRP & Discount Row (Directly below logo, centered)
+    let mrpBottomY = logoY + actualLogoH;
     if (hasMrp) {
-      // 1. MRP Amount (No Badge: Clean text with strikethrough)
-      const mrpFontSize = Math.round(badgeH * 0.54);
-      ctx.font = `900 ${mrpFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", sans-serif`;
-      const mrpTextCenterY = badgeY + badgeH / 2;
+      const mrpY = logoY + actualLogoH + Math.round(height * 0.015);
+      const mrpFontSize = Math.round(height * 0.042);
+      ctx.font = `800 ${mrpFontSize}px "Inter", "Arial Black", sans-serif`;
 
-      const mrpPrefixW = ctx.measureText('MRP ').width;
-      const mrpNumW = ctx.measureText(mrpVal).width;
-      const mrpTotalW = mrpPrefixW + mrpNumW;
+      const mrpPrefix = "MRP ";
+      const mrpPrefixW = ctx.measureText(mrpPrefix).width;
+      const mrpNumStr = `${this.settings.currency}${mrpVal}`;
+      const mrpNumW = ctx.measureText(mrpNumStr).width;
+      const discStr = hasDiscount ? `  ${discountPercent}% OFF` : '';
+      const discW = discStr ? ctx.measureText(discStr).width : 0;
 
-      // Subtle backing for clean legibility against background photo
-      ctx.save();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.88)';
-      ctx.fillRect(badgeX - 2, badgeY, mrpTotalW + 6, badgeH);
-      ctx.restore();
+      const totalMrpW = mrpPrefixW + mrpNumW + discW;
+      const mrpStartX = centerX - Math.round(totalMrpW / 2);
+      const mrpCenterY = mrpY + Math.round(mrpFontSize / 2);
 
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
       ctx.fillStyle = '#000000';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('MRP ', badgeX + 2, mrpTextCenterY);
+      ctx.fillText(mrpPrefix, mrpStartX, mrpCenterY);
+      ctx.fillText(mrpNumStr, mrpStartX + mrpPrefixW, mrpCenterY);
 
-      const mrpNumX = badgeX + 2 + mrpPrefixW;
-      ctx.fillText(mrpVal, mrpNumX, mrpTextCenterY);
-
-      // Strike-through line on MRP amount (Red strikethrough)
-      ctx.strokeStyle = '#d80000';
-      ctx.lineWidth = Math.max(2, Math.round(badgeH * 0.09));
+      // Strikethrough line over mrpNumStr
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = Math.max(1.5, Math.round(mrpFontSize * 0.09));
       ctx.beginPath();
-      ctx.moveTo(mrpNumX - 2, mrpTextCenterY);
-      ctx.lineTo(mrpNumX + mrpNumW + 2, mrpTextCenterY);
+      ctx.moveTo(mrpStartX + mrpPrefixW - 1, mrpCenterY);
+      ctx.lineTo(mrpStartX + mrpPrefixW + mrpNumW + 1, mrpCenterY);
       ctx.stroke();
 
-      // 2. SAVE Badge (No Fill, Red Font, Double Underline)
-      const saveBadgeX = badgeX + mrpTotalW + Math.round(width * 0.025);
-      const saveText = `SAVE ${this.settings.currency}${savings}`;
-      const saveFontSize = Math.round(badgeH * 0.58);
-      ctx.font = `800 ${saveFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", sans-serif`;
-      const saveTextW = ctx.measureText(saveText).width;
-
-      ctx.fillStyle = '#d80000';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(saveText, saveBadgeX, mrpTextCenterY);
-
-      // Double Underline for Save Text
-      const lineThick = Math.max(1.5, Math.round(badgeH * 0.05));
-      const lineGap = Math.max(1.5, Math.round(badgeH * 0.04));
-      const underlineY1 = Math.round(mrpTextCenterY + saveFontSize * 0.52);
-      const underlineY2 = underlineY1 + lineThick + lineGap;
-      ctx.strokeStyle = '#d80000';
-      ctx.lineWidth = lineThick;
-      ctx.beginPath();
-      ctx.moveTo(saveBadgeX, underlineY1);
-      ctx.lineTo(saveBadgeX + saveTextW, underlineY1);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(saveBadgeX, underlineY2);
-      ctx.lineTo(saveBadgeX + saveTextW, underlineY2);
-      ctx.stroke();
+      if (hasDiscount) {
+        ctx.fillStyle = '#d80000';
+        ctx.fillText(discStr, mrpStartX + mrpPrefixW + mrpNumW, mrpCenterY);
+      }
+      mrpBottomY = mrpY + mrpFontSize;
     }
 
-    // 5. Product Title (Consumes upper section with Thin White Outline)
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
+    // 3. Product Title (Directly below MRP, centered)
+    const titleTopY = mrpBottomY + Math.round(height * 0.015);
     const words = titleStr.split(/\s+/).filter(w => w.length > 0);
     let lines = [titleStr];
-    let baseTitleRatio = (width > 800) ? 0.095 : 0.125;
-
-    if (words.length > 1 && titleStr.length > 10) {
+    if (words.length > 1 && titleStr.length > 13) {
       let bestSplitIdx = 1;
       let minDiff = Infinity;
       for (let i = 1; i < words.length; i++) {
@@ -2611,82 +3067,119 @@ class PriceTagApp {
         }
       }
       lines = [words.slice(0, bestSplitIdx).join(' '), words.slice(bestSplitIdx).join(' ')];
-      baseTitleRatio = (width > 800) ? 0.080 : 0.100;
-    } else if (titleStr.length > 16) {
-      baseTitleRatio = (width > 800) ? 0.070 : 0.088;
     }
 
-    const maxTitleByHeight = hasMrp ? Math.round(height * 0.20) : Math.round(height * 0.26);
-    let titleFontSize = Math.min(
-      Math.round(width * baseTitleRatio * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15)),
-      maxTitleByHeight
-    );
-    if (titleFontSize < 14) titleFontSize = 14;
-    ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", "Anton", sans-serif`;
+    const titleMaxW = width - Math.round(width * 0.06);
+    let titleFontSize = Math.round(height * 0.050 * ((tag.titleSize || 100) / 100) * (globalBoost / 1.15));
+    ctx.font = `900 ${titleFontSize}px "Inter", "Arial Black", sans-serif`;
+    let maxLineW = lines.reduce((max, line) => Math.max(max, ctx.measureText(line).width), 0);
+    if (maxLineW > titleMaxW) {
+      titleFontSize = Math.max(9, Math.floor(titleFontSize * (titleMaxW / maxLineW)));
+      ctx.font = `900 ${titleFontSize}px "Inter", "Arial Black", sans-serif`;
+    }
 
-    const maxTitleWidth = width - 16;
-    let maxLineW = 0;
-    lines.forEach(line => {
-      const lw = ctx.measureText(line).width;
-      if (lw > maxLineW) maxLineW = lw;
+    const titleLineStep = Math.round(titleFontSize * 1.05);
+    const titleStartY = titleTopY + Math.round(titleFontSize / 2);
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    lines.forEach((line, i) => {
+      ctx.fillText(line, centerX, titleStartY + (i * titleLineStep));
     });
 
-    if (maxLineW > maxTitleWidth) {
-      titleFontSize = Math.max(10, Math.floor(titleFontSize * (maxTitleWidth / maxLineW)));
-      ctx.font = `900 ${titleFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", "Anton", sans-serif`;
+    const titleBottomY = titleStartY + (lines.length * titleLineStep);
+
+    // 4. Middle Product Image (Cleanly contained in middle area between title and price)
+    const priceCenterY = y + Math.round(height * 0.915);
+    let priceFontSize = Math.round(height * 0.078 * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15));
+    const unitFontSize = Math.round(priceFontSize * 0.70);
+    const priceStr = `${this.settings.currency}${offerVal}`;
+
+    if (hasImage) {
+      try {
+        const img = await this.loadImageAsync(tag.image, imgCache);
+        const imgTop = titleBottomY + Math.round(height * 0.015);
+        const imgBottom = priceCenterY - Math.round(priceFontSize * 0.85);
+        const availH = Math.max(10, imgBottom - imgTop);
+        const availW = width - Math.round(width * 0.08);
+        const availX = x + Math.round(width * 0.04);
+
+        const naturalW = img.naturalWidth || img.width;
+        const naturalH = img.naturalHeight || img.height;
+        const aspect = naturalW / naturalH;
+
+        let drawW, drawH;
+        if (aspect > (availW / availH)) {
+          drawW = availW;
+          drawH = drawW / aspect;
+        } else {
+          drawH = availH;
+          drawW = drawH * aspect;
+        }
+
+        const scale = tag.imageScale || 1.0;
+        drawW *= scale;
+        drawH *= scale;
+        const panX = (tag.imageX || 0) * (width / 400);
+        const panY = (tag.imageY || 0) * (height / 300);
+
+        const drawX = availX + (availW - drawW) / 2 + panX;
+        const drawY = imgTop + (availH - drawH) / 2 + panY;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(availX, imgTop, availW, availH);
+        ctx.clip();
+        ctx.drawImage(img, drawX, drawY, drawW, drawH);
+        ctx.restore();
+      } catch (e) {
+        console.warn('Could not load tag image for canvas export:', e);
+      }
     }
 
-    const titleCenterY = hasMrp 
-      ? y + Math.round(height * 0.49) 
-      : y + Math.round(height * 0.42);
-    const lineHeight = titleFontSize * 0.92;
+    // 5. Bottom Price Row (Yellow Highlight Box for Price + Unit)
+    ctx.font = `900 ${priceFontSize}px "Inter", "Oswald", "Arial Black", sans-serif`;
+    let priceW = ctx.measureText(priceStr).width;
+    ctx.font = `900 ${unitFontSize}px "Inter", "Arial Black", sans-serif`;
+    let unitW = unitText ? ctx.measureText(unitText).width : 0;
 
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = Math.max(3, Math.round(titleFontSize * 0.075));
-    ctx.lineJoin = 'miter';
-    ctx.miterLimit = 2;
-
-    const centerX = x + width / 2;
-    if (lines.length === 1) {
-      ctx.strokeText(lines[0], centerX, titleCenterY);
-      ctx.fillStyle = '#000000';
-      ctx.fillText(lines[0], centerX, titleCenterY);
-    } else {
-      const startY = titleCenterY - (lineHeight / 2);
-      lines.forEach((line, i) => {
-        const lineY = startY + (i * lineHeight);
-        ctx.strokeText(line, centerX, lineY);
-        ctx.fillStyle = '#000000';
-        ctx.fillText(line, centerX, lineY);
-      });
+    const maxRowW = width - Math.round(width * 0.06);
+    if ((priceW + unitW + 20) > maxRowW) {
+      const shrink = maxRowW / (priceW + unitW + 20);
+      priceFontSize = Math.max(12, Math.floor(priceFontSize * shrink));
+      unitFontSize = Math.max(10, Math.floor(unitFontSize * shrink));
+      ctx.font = `900 ${priceFontSize}px "Inter", "Oswald", "Arial Black", sans-serif`;
+      priceW = ctx.measureText(priceStr).width;
+      ctx.font = `900 ${unitFontSize}px "Inter", "Arial Black", sans-serif`;
+      unitW = unitText ? ctx.measureText(unitText).width : 0;
     }
 
-    // 6. Price & Unit (Massive Thick Black Font)
-    const maxPriceWidth = width - 20;
-    const basePriceRatio = (width > 800) ? 0.15 : 0.195;
-    const maxPriceByHeight = hasMrp ? Math.round(height * 0.26) : Math.round(height * 0.34);
-    let priceFontSize = Math.min(
-      Math.round(width * basePriceRatio * ((tag.priceSize || 100) / 100) * (globalBoost / 1.15)),
-      maxPriceByHeight
-    );
-    ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", "Anton", sans-serif`;
-    ctx.textBaseline = 'middle';
+    const yellowPadX = Math.round(width * 0.024);
+    const yellowPadY = Math.max(3, Math.round(height * 0.012));
+    const yellowW = priceW + yellowPadX * 2;
+    const yellowH = priceFontSize + yellowPadY * 2;
+    const totalRowW = yellowW + (unitText ? (unitW + 4) : 0);
+    const rowStartX = centerX - Math.round(totalRowW / 2);
 
-    let measuredPriceWidth = ctx.measureText(fullPriceStr).width;
-    if (measuredPriceWidth > maxPriceWidth) {
-      priceFontSize = Math.max(18, Math.floor(priceFontSize * (maxPriceWidth / measuredPriceWidth)));
-      ctx.font = `900 ${priceFontSize}px "Impact", "LocalHeavyCondensed", "Arial Black", "Anton", sans-serif`;
-    }
+    // Draw bright yellow rectangular box
+    ctx.fillStyle = '#ffff00';
+    ctx.fillRect(rowStartX, priceCenterY - Math.round(yellowH / 2), yellowW, yellowH);
 
-    const priceY = hasMrp 
-      ? y + Math.round(height * 0.82) 
-      : y + Math.round(height * 0.78);
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = Math.max(3, Math.round(priceFontSize * 0.065));
-    ctx.strokeText(fullPriceStr, centerX, priceY);
-
+    // Draw price text in black bold font inside yellow box
+    ctx.font = `900 ${priceFontSize}px "Inter", "Oswald", "Arial Black", sans-serif`;
     ctx.fillStyle = '#000000';
-    ctx.fillText(fullPriceStr, centerX, priceY);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(priceStr, rowStartX + Math.round(yellowW / 2), priceCenterY);
+
+    // Draw unit text in black bold font right next to yellow box
+    if (unitText) {
+      ctx.font = `900 ${unitFontSize}px "Inter", "Arial Black", sans-serif`;
+      ctx.fillStyle = '#000000';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(unitText, rowStartX + yellowW + 4, priceCenterY);
+    }
 
     ctx.restore();
   }
@@ -2870,14 +3363,16 @@ class PriceTagApp {
     }
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.crossOrigin = 'anonymous';
+      if (src && (src.startsWith('http://') || src.startsWith('https://'))) {
+        img.crossOrigin = 'anonymous';
+      }
       img.onload = () => {
         if (cache) cache.set(src, img);
         resolve(img);
       };
       img.onerror = () => {
         // If external image fails due to CORS or direct connection, fallback to server proxy
-        if (src && !src.startsWith('/api/proxy-image') && !src.startsWith('data:') && !src.startsWith('blob:')) {
+        if (src && (src.startsWith('http://') || src.startsWith('https://')) && !src.startsWith('/api/proxy-image')) {
           const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(src)}`;
           const proxyImg = new Image();
           proxyImg.crossOrigin = 'anonymous';

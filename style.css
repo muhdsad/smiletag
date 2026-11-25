@@ -585,7 +585,7 @@ body {
   user-select: none;
   box-sizing: border-box;
   container-type: size; /* Allows both cqi (width) and cqb (height) for exact full-area scaling */
-  isolation: isolate; /* Creates stacking context so z-index: -1 stays contained within tag */
+  isolation: isolate;
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -604,31 +604,7 @@ body {
   outline-offset: 1mm;
 }
 
-/* Background Product Image Layer (Minus z-index) */
-.tag-bg-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background-color: #ffffff;
-  pointer-events: none;
-}
-
-.tag-bg-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover !important; /* Consumes full area of column without top/bottom bars */
-  transform-origin: center center;
-  pointer-events: none;
-}
-
-/* Tag Content Overlay */
+/* Tag Content Overlay for Upward Alignment (Matching Reference Image) */
 .tag-content-layer {
   position: relative;
   z-index: 2;
@@ -637,12 +613,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.5% 2.5%;
+  align-items: center;
+  padding: 3% 3% 2% 3%;
   box-sizing: border-box;
-}
-
-.tag-content-layer.no-badges {
-  padding: 1% 2.5%;
+  background-color: #ffffff;
 }
 
 /* Top Brand Logo Row (Permanently at the top of each price tag) */
@@ -658,64 +632,41 @@ body {
 }
 
 .tag-top-logo {
-  max-height: clamp(14px, 16cqb, 48px);
-  max-width: 54%;
+  max-height: clamp(14px, 12cqb, 34px);
+  max-width: 55%;
   object-fit: contain;
-  background-color: #ffffff;
-  padding: 1px 6px;
-  border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
   display: block;
 }
 
-.has-badges .tag-top-logo {
-  max-height: clamp(11px, 12cqb, 34px);
-  max-width: 46%;
-}
-
-.no-badges .tag-top-logo {
-  max-height: clamp(14px, 18cqb, 52px);
-  max-width: 55%;
-}
-
-/* Top MRP & Saving Row */
-.tag-badge-row {
+/* Top MRP & Discount Row (Directly below logo, centered) */
+.tag-mrp-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 3px;
+  justify-content: center;
+  gap: 4px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
   margin-bottom: 2px;
-  overflow: hidden;
+  font-family: var(--font-tag-heading), 'Inter', sans-serif;
+  font-size: clamp(8px, 4.8cqi, 13px);
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
-/* MRP Amount (No Badge: Clean plain text with strikethrough) */
-.mrp-text-nobadge,
-.mrp-badge {
-  background: rgba(255, 255, 255, 0.88);
+.mrp-label {
   color: #000000;
-  padding: 0.8% 2%;
-  font-family: var(--font-tag-heading);
-  font-size: clamp(7.5px, 5.0cqi, 14px);
-  font-weight: 900;
-  line-height: 1.1;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  letter-spacing: 0.1px;
-  border-radius: 2px;
-  box-shadow: none;
-  flex-shrink: 0;
-  text-shadow: 0 0 1px #ffffff;
+  font-weight: 800;
 }
 
 .mrp-strike {
   position: relative;
   display: inline-block;
-  margin-left: 2px;
+  color: #000000;
+  font-weight: 800;
+  margin: 0 1px;
 }
 
 .mrp-strike::after {
@@ -724,12 +675,223 @@ body {
   left: -2px;
   right: -2px;
   top: 50%;
-  height: 2px;
-  background-color: #d80000; /* Red strikethrough matching detected poster */
+  height: 1.5px;
+  background-color: #000000;
   transform: translateY(-50%);
 }
 
-/* Red Store Save Badge (SAVE ₹... - No fill, red font, double underline) */
+.discount-badge {
+  color: #d80000;
+  font-weight: 900;
+  margin-left: 2px;
+}
+
+/* Product Title Row (Upward right below MRP) */
+.tag-title-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+  padding: 0 2px;
+  box-sizing: border-box;
+  max-height: 2.6em;
+  overflow: hidden;
+}
+
+.tag-title-text {
+  font-family: var(--font-tag-heading), 'Inter', sans-serif;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  text-transform: uppercase;
+  line-height: 1.05 !important;
+  letter-spacing: -0.2px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  font-size: calc(clamp(8.5px, min(5.4cqi, 8.8cqb), 22px) * var(--font-title-mult, 1.2) * var(--title-shrink, 1));
+}
+
+/* Middle Product Image Area (Cleanly framed in middle between title and price) */
+.tag-image-middle {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1% 2%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.tag-product-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain !important;
+  display: block;
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+/* Bottom Price Row (Yellow Highlight Box for Price + Unit) */
+.tag-price-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-bottom: 2px;
+  box-sizing: border-box;
+}
+
+.tag-price-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.tag-price-yellow-box {
+  background-color: #ffff00; /* Pure bright yellow matching uploaded image */
+  color: #000000;
+  font-family: var(--font-tag-heading), 'Inter', 'Oswald', sans-serif;
+  font-weight: 900 !important;
+  line-height: 1.0;
+  padding: 2px 7px;
+  border-radius: 1px;
+  font-size: calc(clamp(15px, min(10.5cqi, 15cqb), 38px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1));
+  letter-spacing: -0.4px;
+  display: inline-block;
+}
+
+.tag-unit-text {
+  font-family: var(--font-tag-heading), 'Inter', sans-serif;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  font-size: calc(clamp(11px, min(8.2cqi, 12cqb), 28px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1));
+  margin-left: 3px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   9 TO UPWARD TAGS: NO IMAGE / CLEAR MODE (Everything Centered in Middle)
+   ========================================================= */
+.price-tag-card.no-image:not(.poster-style) .tag-content-layer,
+.price-tag-card.tag-centered .tag-content-layer,
+.tag-content-layer.tag-centered-layer {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  height: 100% !important;
+  width: 100% !important;
+  padding: 4% 4% !important;
+  box-sizing: border-box !important;
+  gap: clamp(6px, 2.8cqb, 16px) !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-centered-inner,
+.price-tag-card.tag-centered .tag-centered-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  gap: clamp(5px, 2.6cqb, 14px) !important;
+  flex: 0 0 auto !important;
+  margin: auto 0 !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-logo-row,
+.price-tag-card.tag-centered .tag-logo-row {
+  margin-bottom: 0 !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-top-logo,
+.price-tag-card.tag-centered .tag-top-logo {
+  max-height: clamp(18px, 14cqb, 42px) !important;
+  max-width: 65% !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-mrp-row,
+.price-tag-card.tag-centered .tag-mrp-row {
+  margin-bottom: 0 !important;
+  font-size: clamp(9px, 5.2cqi, 15px) !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-title-row,
+.price-tag-card.tag-centered .tag-title-row {
+  margin-bottom: 0 !important;
+  max-height: none !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-title-text,
+.price-tag-card.tag-centered .tag-title-text {
+  font-size: calc(clamp(11px, min(6.6cqi, 10.5cqb), 28px) * var(--font-title-mult, 1.2) * var(--title-shrink, 1)) !important;
+  line-height: 1.08 !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-image-middle,
+.price-tag-card.tag-centered .tag-image-middle {
+  display: none !important;
+  flex: 0 0 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-price-row,
+.price-tag-card.tag-centered .tag-price-row {
+  margin-top: 0 !important;
+  padding-bottom: 0 !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-price-yellow-box,
+.price-tag-card.tag-centered .tag-price-yellow-box {
+  padding: 3px 10px !important;
+  font-size: calc(clamp(18px, min(12.5cqi, 18cqb), 44px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important;
+}
+
+.price-tag-card.no-image:not(.poster-style) .tag-unit-text,
+.price-tag-card.tag-centered .tag-unit-text {
+  font-size: calc(clamp(13px, min(9.5cqi, 14cqb), 32px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important;
+}
+
+/* Red Store Save Badge (when used in badges) */
 .save-badge {
   background: transparent !important;
   background-color: transparent !important;
@@ -757,111 +919,6 @@ body {
 .save-badge span {
   color: inherit !important;
   text-decoration: inherit !important;
-}
-
-/* Offer / Product Title Text (Aligned CENTER over Product Image with Thin White Outline & 2-Line Auto-Shrink) */
-.tag-title-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  flex: 1 1 50%;
-  margin: 0;
-  padding: 2px 4px;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.has-badges .tag-title-row {
-  flex: 1 1 45%;
-}
-
-.no-badges .tag-title-row {
-  flex: 1 1 50%;
-  padding-top: 2px;
-}
-
-.tag-title-text {
-  font-family: var(--font-tag-heading);
-  font-weight: 900 !important;
-  font-stretch: condensed;
-  font-variation-settings: 'wdth' 70, 'wght' 950;
-  color: #000000 !important;
-  text-transform: uppercase;
-  line-height: 0.88 !important;
-  letter-spacing: -0.5px;
-  text-align: center;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Wraps cleanly into two lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  word-break: break-word;
-  hyphens: auto;
-  font-size: calc(clamp(10px, min(16cqi, 24cqb), 75px) * var(--font-title-mult, 1.2) * var(--title-shrink, 1));
-  paint-order: stroke fill;
-  /* Crisp white outline */
-  -webkit-text-stroke: 1.4px #ffffff;
-  text-shadow: 0 0 1.5px #ffffff, 0 1px 3px rgba(0,0,0,0.35);
-}
-
-.no-badges .tag-title-text {
-  font-size: calc(clamp(12px, min(18cqi, 28cqb), 90px) * var(--font-title-mult, 1.2) * var(--title-shrink, 1));
-}
-
-/* Main Price & Unit Row (Massive Thick Heavy Solid Black, Auto-fit into Column) */
-.tag-price-row {
-  width: 100%;
-  text-align: center;
-  margin: 0;
-  padding: 0 4px;
-  box-sizing: border-box;
-  flex: 1 1 50%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.has-badges .tag-price-row {
-  flex: 1 1 45%;
-}
-
-.no-badges .tag-price-row {
-  flex: 1 1 50%;
-  padding-bottom: 2px;
-}
-
-.tag-price-text {
-  font-family: var(--font-tag-heading);
-  font-weight: 900 !important;
-  font-stretch: condensed;
-  font-variation-settings: 'wdth' 70, 'wght' 950;
-  color: #000000 !important;
-  line-height: 0.85 !important;
-  letter-spacing: -0.8px;
-  white-space: nowrap;
-  font-size: calc(clamp(26px, min(20cqi, 32cqb), 110px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1));
-  max-width: 100%;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-  paint-order: stroke fill;
-  /* Crisp white outline */
-  -webkit-text-stroke: 1.4px #ffffff;
-  text-shadow: 0 0 1.5px #ffffff, 0 1px 3px rgba(0,0,0,0.35);
-}
-
-.no-badges .tag-price-text {
-  font-size: calc(clamp(30px, min(22cqi, 38cqb), 130px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1));
-}
-
-.tag-unit-text {
-  font-size: 0.65em;
-  margin-left: 3px;
-  letter-spacing: -0.5px;
-  white-space: nowrap;
 }
 
 /* =========================================================
@@ -1090,6 +1147,121 @@ body {
   color: #000000 !important;
   letter-spacing: 0;
   margin-left: 2px;
+}
+
+/* =========================================================
+   A4 POSTER STYLE: CENTERED (When image is cleared / hidden)
+   "1 to eight Tags Poster If there show image select clear move Every thing in the middle"
+   ========================================================= */
+.price-tag-card.poster-style.poster-centered {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 4% 5% !important;
+  background-color: #ffffff !important;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-centered-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  gap: clamp(8px, 2.5cqb, 24px);
+}
+
+.price-tag-card.poster-style.poster-centered .poster-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-top-logo {
+  max-height: clamp(24px, 16cqb, 72px);
+  max-width: 65%;
+  object-fit: contain;
+  display: block;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2.2cqi, 18px);
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-mrp-box {
+  color: #000000;
+  font-family: var(--font-tag-heading);
+  font-size: clamp(12px, min(4.5cqi, 8cqb), 28px);
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-save-badge {
+  color: #d80000 !important;
+  font-family: var(--font-tag-heading);
+  font-size: clamp(14px, min(5.5cqi, 10cqb), 34px);
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 4%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-title-text {
+  font-family: var(--font-tag-heading), 'Inter', sans-serif;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  text-transform: uppercase;
+  line-height: 0.95 !important;
+  letter-spacing: -0.5px;
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: calc(clamp(16px, min(9cqi, 16cqb), 80px) * var(--font-title-mult, 1.2) * var(--title-shrink, 1));
+}
+
+.price-tag-card.poster-style.poster-centered .poster-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.price-tag-card.poster-style.poster-centered .poster-price-text {
+  font-family: var(--font-tag-heading);
+  font-weight: 900 !important;
+  color: #000000 !important;
+  line-height: 0.88;
+  letter-spacing: -0.8px;
+  text-align: center;
+  white-space: nowrap;
+  font-size: calc(clamp(28px, min(14cqi, 26cqb), 120px) * var(--font-price-mult, 1.2) * var(--price-shrink, 1));
 }
 
 /* =========================================================
@@ -1917,6 +2089,65 @@ body {
 
   .no-badges .tag-price-text {
     font-size: calc(29pt * var(--font-price-mult, 1.2) * var(--price-shrink, 1)) !important;
+  }
+
+  /* Centered 9+ Shelf Tags & Posters in Print */
+  .price-tag-card.no-image:not(.poster-style) .tag-content-layer,
+  .price-tag-card.tag-centered .tag-content-layer,
+  .tag-content-layer.tag-centered-layer {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    height: 100% !important;
+    padding: 3% !important;
+  }
+
+  .price-tag-card.no-image:not(.poster-style) .tag-centered-inner,
+  .price-tag-card.tag-centered .tag-centered-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: auto 0 !important;
+    gap: 2.5mm !important;
+    flex: 0 0 auto !important;
+  }
+
+  .price-tag-card.no-image:not(.poster-style) .tag-logo-row,
+  .price-tag-card.tag-centered .tag-logo-row {
+    flex: 0 0 auto !important;
+    margin-bottom: 0 !important;
+  }
+
+  .price-tag-card.no-image:not(.poster-style) .tag-mrp-row,
+  .price-tag-card.tag-centered .tag-mrp-row {
+    flex: 0 0 auto !important;
+    margin-bottom: 0 !important;
+  }
+
+  .price-tag-card.no-image:not(.poster-style) .tag-title-row,
+  .price-tag-card.tag-centered .tag-title-row {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .price-tag-card.no-image:not(.poster-style) .tag-price-row,
+  .price-tag-card.tag-centered .tag-price-row {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .price-tag-card.no-image:not(.poster-style) .tag-price-yellow-box,
+  .price-tag-card.tag-centered .tag-price-yellow-box {
+    background-color: #ffff00 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color: #000000 !important;
   }
 
   /* 4x5 & 5x4 Grid Print Sizing (Guarantees all 20 tags fit on 1 single sheet) */

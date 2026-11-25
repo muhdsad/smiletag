@@ -102,6 +102,15 @@
           </select>
         </div>
 
+        <!-- Show / Clear Images Control -->
+        <div class="control-group highlight-group">
+          <label for="imageDisplayToggle">Product Images</label>
+          <select id="imageDisplayToggle">
+            <option value="show" selected>🖼️ Show Images</option>
+            <option value="clear">🚫 Clear / Hide Images</option>
+          </select>
+        </div>
+
         <!-- Primary Action Buttons -->
         <div class="header-actions">
           <button id="btnPrint" class="btn btn-primary" title="Print all tags formatted for A4 portrait paper">
@@ -164,6 +173,12 @@
         </button>
         <button id="btnClearAllMrp" class="btn btn-tool" title="Remove MRP and Save badges from all tags">
           🚫 Remove All MRP
+        </button>
+        <button id="btnClearAllImages" class="btn btn-tool" title="Clear images from all tags">
+          🚫 Clear All Images
+        </button>
+        <button id="btnLoadUploadedSample" class="btn btn-tool btn-accent" title="Load the 12 Supermarket Reference Items from the uploaded image">
+          📋 Load Uploaded 12 Tags
         </button>
         <button id="btnLoadPosterSample" class="btn btn-tool btn-accent" title="Load the 4 Reference Rice Posters from the uploaded sample">
           🖼️ Load 4 Poster Items
@@ -369,7 +384,10 @@
                   </div>
                 </div>
 
-                <button id="btnResetImagePos" class="btn btn-sm btn-secondary w-100">Reset Image Position</button>
+                <div style="display:flex;gap:6px;margin-top:6px;">
+                  <button id="btnResetImagePos" class="btn btn-sm btn-secondary" style="flex:1;">Reset Position</button>
+                  <button id="btnDtClearImage" class="btn btn-sm btn-danger-ghost" style="flex:1;">Clear Image</button>
+                </div>
               </div>
             </div>
 
@@ -544,7 +562,10 @@ ROYAL APPLE	240	169	KG
             </div>
           </div>
           <div class="form-field">
-            <label>Change Product Image</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <label style="margin-bottom:0;">Change Product Image</label>
+              <button type="button" id="btnQeClearImage" class="btn btn-sm btn-danger-ghost" style="padding:2px 8px;font-size:11px;">Clear Image</button>
+            </div>
             <input type="file" id="qeImageUpload" accept="image/*" class="form-input">
           </div>
           <div class="modal-actions mt-3">
